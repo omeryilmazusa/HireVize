@@ -1,7 +1,8 @@
 from datetime import datetime
+from typing import Optional
 from uuid import UUID
 
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel
 
 
 class JobCreate(BaseModel):
@@ -11,15 +12,15 @@ class JobCreate(BaseModel):
 class JobResponse(BaseModel):
     id: UUID
     source_url: str
-    company_name: str | None = None
-    job_title: str | None = None
-    location: str | None = None
-    salary_range: str | None = None
-    description_text: str | None = None
-    requirements: dict | None = None
-    ats_platform: str | None = None
+    company_name: Optional[str] = None
+    job_title: Optional[str] = None
+    location: Optional[str] = None
+    salary_range: Optional[str] = None
+    description_text: Optional[str] = None
+    requirements: Optional[dict] = None
+    ats_platform: Optional[str] = None
     scrape_status: str
-    scrape_error: str | None = None
+    scrape_error: Optional[str] = None
     created_at: datetime
     updated_at: datetime
 

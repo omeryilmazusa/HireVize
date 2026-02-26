@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "=== Starting Upply Development Servers ==="
+echo "=== Starting Hirevize Development Servers ==="
 
 # Ensure Docker services are running
 docker compose up -d

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 """Generic form-fill fallback adapter using heuristics."""
 
 from pathlib import Path

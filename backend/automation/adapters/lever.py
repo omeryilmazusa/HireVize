@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 """Lever ATS adapter for automating job applications."""
 
 from pathlib import Path

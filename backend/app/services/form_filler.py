@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 """Playwright form automation service: fills and submits job application forms."""
 
 from pathlib import Path

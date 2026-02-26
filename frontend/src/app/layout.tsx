@@ -4,7 +4,7 @@ import { Sidebar } from "@/components/layout/Sidebar";
 import { Header } from "@/components/layout/Header";
 
 export const metadata: Metadata = {
-  title: "Upply - Automated Job Applications",
+  title: "Hirevize - Automated Job Applications",
   description: "Tailor resumes and automate job applications",
 };
 

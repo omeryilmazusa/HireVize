@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 from uuid import UUID
 
 from pydantic import BaseModel
@@ -6,28 +7,31 @@ from pydantic import BaseModel
 
 class ApplicationCreate(BaseModel):
     job_id: UUID
-    tailored_resume_id: UUID | None = None
-    cover_letter: str | None = None
-    form_answers: dict | None = None
+    tailored_resume_id: Optional[UUID] = None
+    cover_letter: Optional[str] = None
+    form_answers: Optional[dict] = None
 
 
 class ApplicationStatusUpdate(BaseModel):
     status: str
-    notes: str | None = None
+    notes: Optional[str] = None
 
 
 class ApplicationResponse(BaseModel):
     id: UUID
     job_id: UUID
-    tailored_resume_id: UUID | None = None
+    tailored_resume_id: Optional[UUID] = None
     status: str
-    cover_letter: str | None = None
-    form_answers: dict | None = None
-    automation_log: dict | None = None
-    submitted_at: datetime | None = None
-    error_message: str | None = None
-    notes: str | None = None
+    cover_letter: Optional[str] = None
+    form_answers: Optional[dict] = None
+    automation_log: Optional[dict] = None
+    submitted_at: Optional[datetime] = None
+    error_message: Optional[str] = None
+    notes: Optional[str] = None
     created_at: datetime
     updated_at: datetime
+    # Joined from Job
+    company_name: Optional[str] = None
+    job_title: Optional[str] = None
 
     model_config = {"from_attributes": True}

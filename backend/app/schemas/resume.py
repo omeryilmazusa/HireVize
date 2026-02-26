@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 from uuid import UUID
 
 from pydantic import BaseModel
@@ -13,8 +14,8 @@ class ResumeCreate(ResumeBase):
 
 
 class ResumeUpdate(BaseModel):
-    title: str | None = None
-    parsed_sections: dict | None = None
+    title: Optional[str] = None
+    parsed_sections: Optional[dict] = None
 
 
 class ResumeResponse(ResumeBase):
@@ -22,7 +23,8 @@ class ResumeResponse(ResumeBase):
     file_name: str
     file_type: str
     is_primary: bool
-    parsed_sections: dict | None = None
+    parsed_sections: Optional[dict] = None
+    raw_text: Optional[str] = None
     created_at: datetime
     updated_at: datetime
 

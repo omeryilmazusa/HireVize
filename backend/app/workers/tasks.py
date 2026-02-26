@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 """ARQ task definitions for async background jobs."""
 
 from uuid import UUID

@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
-from app.routers import applications, dashboard, jobs, resumes, tailoring
+from app.routers import applications, dashboard, jobs, profile, resumes, tailoring
 
 
 @asynccontextmanager
@@ -12,7 +12,7 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(title="Upply API", version="0.1.0", lifespan=lifespan)
+app = FastAPI(title="Hirevize API", version="0.1.0", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -27,6 +27,7 @@ app.include_router(jobs.router, prefix="/api/v1")
 app.include_router(tailoring.router, prefix="/api/v1")
 app.include_router(applications.router, prefix="/api/v1")
 app.include_router(dashboard.router, prefix="/api/v1")
+app.include_router(profile.router, prefix="/api/v1")
 
 
 @app.get("/health")

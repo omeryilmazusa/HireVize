@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 """Resume parsing service: extracts text and structures sections from PDF/DOCX files."""
 
 from pathlib import Path

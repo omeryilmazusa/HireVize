@@ -1,4 +1,5 @@
 import uuid
+from typing import Optional
 
 from sqlalchemy import ForeignKey, String, Text
 from sqlalchemy.dialects.postgresql import JSONB, UUID
@@ -12,17 +13,17 @@ class Job(UUIDMixin, TimestampMixin, Base):
 
     user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
     source_url: Mapped[str] = mapped_column(String(2000), nullable=False)
-    company_name: Mapped[str | None] = mapped_column(String(500))
-    job_title: Mapped[str | None] = mapped_column(String(500))
-    location: Mapped[str | None] = mapped_column(String(500))
-    salary_range: Mapped[str | None] = mapped_column(String(200))
-    description_text: Mapped[str | None] = mapped_column(Text)
-    requirements: Mapped[dict | None] = mapped_column(JSONB)
-    ats_platform: Mapped[str | None] = mapped_column(String(100))
-    application_url: Mapped[str | None] = mapped_column(String(2000))
+    company_name: Mapped[Optional[str]] = mapped_column(String(500))
+    job_title: Mapped[Optional[str]] = mapped_column(String(500))
+    location: Mapped[Optional[str]] = mapped_column(String(500))
+    salary_range: Mapped[Optional[str]] = mapped_column(String(200))
+    description_text: Mapped[Optional[str]] = mapped_column(Text)
+    requirements: Mapped[Optional[dict]] = mapped_column(JSONB)
+    ats_platform: Mapped[Optional[str]] = mapped_column(String(100))
+    application_url: Mapped[Optional[str]] = mapped_column(String(2000))
     scrape_status: Mapped[str] = mapped_column(String(50), nullable=False, default="pending", server_default="pending")
-    scrape_error: Mapped[str | None] = mapped_column(Text)
-    raw_html: Mapped[str | None] = mapped_column(Text)
+    scrape_error: Mapped[Optional[str]] = mapped_column(Text)
+    raw_html: Mapped[Optional[str]] = mapped_column(Text)
 
     user = relationship("User", back_populates="jobs")
     tailored_resumes = relationship("TailoredResume", back_populates="job", cascade="all, delete-orphan")

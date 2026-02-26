@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 """Playwright browser pool: maintains a persistent browser instance with fresh contexts per task."""
 
 from playwright.async_api import Browser, BrowserContext, Page, async_playwright

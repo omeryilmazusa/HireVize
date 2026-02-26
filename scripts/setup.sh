@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "=== Upply Setup ==="
+echo "=== Hirevize Setup ==="
 
 # Start Docker services (PostgreSQL + Redis)
 echo "Starting Docker services..."

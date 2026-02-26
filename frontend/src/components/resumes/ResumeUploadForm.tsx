@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import { api } from "@/lib/api";
+import { useResumes } from "@/hooks/useResumes";
 
 export function ResumeUploadForm() {
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(false);
+  const { mutate } = useResumes();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,7 +21,7 @@ export function ResumeUploadForm() {
       await api.upload("/api/v1/resumes", formData);
       setFile(null);
       setTitle("");
-      // TODO: refresh resume list
+      mutate();
     } catch (err) {
       console.error("Failed to upload resume:", err);
     } finally {

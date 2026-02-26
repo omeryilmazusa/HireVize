@@ -6,12 +6,10 @@ export function ApplicationRow({ application }: { application: Application }) {
   return (
     <tr className="hover:bg-gray-50">
       <td className="px-4 py-3 font-medium text-gray-900">
-        {/* TODO: show company name from joined job */}
-        --
+        {application.company_name || "Unknown"}
       </td>
       <td className="px-4 py-3 text-gray-600">
-        {/* TODO: show job title from joined job */}
-        --
+        {application.job_title || "Untitled"}
       </td>
       <td className="px-4 py-3">
         <StatusBadge status={application.status} />

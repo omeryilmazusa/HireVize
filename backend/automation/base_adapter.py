@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 """Abstract base class for ATS-specific form filling adapters."""
 
 from abc import ABC, abstractmethod

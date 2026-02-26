@@ -2,9 +2,9 @@ services:
   db:
     image: postgres:16
     environment:
-      POSTGRES_DB: upply
-      POSTGRES_USER: upply
-      POSTGRES_PASSWORD: upply_dev
+      POSTGRES_DB: hirevize
+      POSTGRES_USER: hirevize
+      POSTGRES_PASSWORD: hirevize_dev
     ports:
       - "5432:5432"
     volumes:

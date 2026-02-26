@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 from uuid import UUID
 
 from pydantic import BaseModel
@@ -6,7 +7,7 @@ from pydantic import BaseModel
 
 class TailorRequest(BaseModel):
     base_resume_id: UUID
-    model: str | None = None
+    model: Optional[str] = None
 
 
 class TailoredResumeUpdate(BaseModel):
@@ -18,12 +19,12 @@ class TailoredResumeResponse(BaseModel):
     job_id: UUID
     base_resume_id: UUID
     tailored_sections: dict
-    diff_summary: dict | None = None
+    diff_summary: Optional[dict] = None
     ai_model_used: str
-    ai_prompt_tokens: int | None = None
-    ai_completion_tokens: int | None = None
+    ai_prompt_tokens: Optional[int] = None
+    ai_completion_tokens: Optional[int] = None
     status: str
-    file_path: str | None = None
+    file_path: Optional[str] = None
     created_at: datetime
     updated_at: datetime
 

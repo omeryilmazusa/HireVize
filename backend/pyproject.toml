@@ -1,7 +1,7 @@
 [project]
-name = "upply-backend"
+name = "hirevize-backend"
 version = "0.1.0"
-description = "Upply - Automated Job Application Backend"
+description = "Hirevize - Automated Job Application Backend"
 requires-python = ">=3.9"
 dependencies = [
     "fastapi>=0.110.0",
@@ -28,6 +28,9 @@ dev = [
     "pytest-asyncio>=0.23.0",
     "httpx>=0.27.0",
 ]
+
+[tool.setuptools.packages.find]
+include = ["app*", "automation*"]
 
 [build-system]
 requires = ["setuptools>=68.0"]

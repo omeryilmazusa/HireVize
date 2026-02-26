@@ -5,6 +5,7 @@ export interface Resume {
   file_type: string;
   is_primary: boolean;
   parsed_sections: Record<string, unknown> | null;
+  raw_text: string | null;
   created_at: string;
   updated_at: string;
 }

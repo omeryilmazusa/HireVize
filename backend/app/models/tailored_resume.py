@@ -1,4 +1,5 @@
 import uuid
+from typing import Optional
 
 from sqlalchemy import ForeignKey, Integer, String, UniqueConstraint
 from sqlalchemy.dialects.postgresql import JSONB, UUID
@@ -16,12 +17,12 @@ class TailoredResume(UUIDMixin, TimestampMixin, Base):
     job_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("jobs.id"), nullable=False)
     base_resume_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("resumes.id"), nullable=False)
     tailored_sections: Mapped[dict] = mapped_column(JSONB, nullable=False)
-    diff_summary: Mapped[dict | None] = mapped_column(JSONB)
+    diff_summary: Mapped[Optional[dict]] = mapped_column(JSONB)
     ai_model_used: Mapped[str] = mapped_column(String(100), nullable=False)
-    ai_prompt_tokens: Mapped[int | None] = mapped_column(Integer)
-    ai_completion_tokens: Mapped[int | None] = mapped_column(Integer)
+    ai_prompt_tokens: Mapped[Optional[int]] = mapped_column(Integer)
+    ai_completion_tokens: Mapped[Optional[int]] = mapped_column(Integer)
     status: Mapped[str] = mapped_column(String(50), nullable=False, default="draft", server_default="draft")
-    file_path: Mapped[str | None] = mapped_column(String(1000))
+    file_path: Mapped[Optional[str]] = mapped_column(String(1000))
 
     job = relationship("Job", back_populates="tailored_resumes")
     base_resume = relationship("Resume", back_populates="tailored_resumes")

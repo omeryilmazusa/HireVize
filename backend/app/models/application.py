@@ -1,5 +1,6 @@
 import uuid
 from datetime import datetime
+from typing import Optional
 
 from sqlalchemy import DateTime, ForeignKey, String, Text
 from sqlalchemy.dialects.postgresql import JSONB, UUID
@@ -13,16 +14,16 @@ class Application(UUIDMixin, TimestampMixin, Base):
 
     user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
     job_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("jobs.id"), nullable=False, unique=True)
-    tailored_resume_id: Mapped[uuid.UUID | None] = mapped_column(
+    tailored_resume_id: Mapped[Optional[uuid.UUID]] = mapped_column(
         UUID(as_uuid=True), ForeignKey("tailored_resumes.id")
     )
     status: Mapped[str] = mapped_column(String(50), nullable=False, default="pending", server_default="pending")
-    cover_letter: Mapped[str | None] = mapped_column(Text)
-    form_answers: Mapped[dict | None] = mapped_column(JSONB)
-    automation_log: Mapped[dict | None] = mapped_column(JSONB)
-    submitted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
-    error_message: Mapped[str | None] = mapped_column(Text)
-    notes: Mapped[str | None] = mapped_column(Text)
+    cover_letter: Mapped[Optional[str]] = mapped_column(Text)
+    form_answers: Mapped[Optional[dict]] = mapped_column(JSONB)
+    automation_log: Mapped[Optional[dict]] = mapped_column(JSONB)
+    submitted_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
+    error_message: Mapped[Optional[str]] = mapped_column(Text)
+    notes: Mapped[Optional[str]] = mapped_column(Text)
 
     user = relationship("User", back_populates="applications")
     job = relationship("Job", back_populates="application")

@@ -2,7 +2,7 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    database_url: str = "postgresql+asyncpg://upply:upply_dev@localhost:5432/upply"
+    database_url: str = "postgresql+asyncpg://hirevize:hirevize_dev@localhost:5432/hirevize"
     redis_url: str = "redis://localhost:6379"
 
     openai_api_key: str = ""
@@ -15,7 +15,7 @@ class Settings(BaseSettings):
 
     storage_path: str = "./storage"
 
-    model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
+    model_config = {"env_file": ".env", "env_file_encoding": "utf-8", "extra": "ignore"}
 
 
 settings = Settings()

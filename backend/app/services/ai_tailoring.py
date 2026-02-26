@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 """AI resume tailoring service: generates tailored resume sections using OpenAI/Claude."""
 
 import json
