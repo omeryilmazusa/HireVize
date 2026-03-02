@@ -22,7 +22,7 @@ async def fill_and_submit(
         page: Playwright page instance
         application_url: URL of the application form
         ats_platform: detected ATS (greenhouse, lever, workday, unknown)
-        user_data: dict with name, email, phone, linkedin_url, portfolio_url
+        user_data: dict with first_name, last_name, email, phones, linkedin_url, portfolio_url
         resume_path: path to the resume PDF to upload
         cover_letter: optional cover letter text
         form_answers: optional dict of additional form field answers

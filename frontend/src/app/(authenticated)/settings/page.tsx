@@ -6,9 +6,10 @@ import { api } from "@/lib/api";
 
 interface Profile {
   id: string;
-  name: string;
+  first_name: string;
+  last_name: string;
   email: string;
-  phone: string | null;
+  phones: Array<{ type: string; number: string }> | null;
   linkedin_url: string | null;
   portfolio_url: string | null;
   preferences: Record<string, string>;
@@ -20,9 +21,9 @@ export default function SettingsPage() {
   const [message, setMessage] = useState("");
 
   // Form fields
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
   const [linkedinUrl, setLinkedinUrl] = useState("");
   const [portfolioUrl, setPortfolioUrl] = useState("");
   const [defaultModel, setDefaultModel] = useState("claude-sonnet-4-20250514");
@@ -30,9 +31,9 @@ export default function SettingsPage() {
   useEffect(() => {
     api.get<Profile>("/api/v1/profile").then((data) => {
       setProfile(data);
-      setName(data.name || "");
+      setFirstName(data.first_name || "");
+      setLastName(data.last_name || "");
       setEmail(data.email || "");
-      setPhone(data.phone || "");
       setLinkedinUrl(data.linkedin_url || "");
       setPortfolioUrl(data.portfolio_url || "");
       setDefaultModel(data.preferences?.default_model || "claude-sonnet-4-20250514");
@@ -44,9 +45,9 @@ export default function SettingsPage() {
     setMessage("");
     try {
       const updated = await api.put<Profile>("/api/v1/profile", {
-        name,
+        first_name: firstName,
+        last_name: lastName,
         email,
-        phone: phone || null,
         linkedin_url: linkedinUrl || null,
         portfolio_url: portfolioUrl || null,
       });
@@ -103,12 +104,23 @@ export default function SettingsPage() {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className="mb-1 block text-sm font-medium text-gray-700">
-                Full Name
+                First Name
               </label>
               <input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Full Name"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                placeholder="First Name"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-sm font-medium text-gray-700">
+                Last Name
+              </label>
+              <input
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                placeholder="Last Name"
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
               />
             </div>
@@ -121,17 +133,6 @@ export default function SettingsPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 type="email"
                 placeholder="Email"
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">
-                Phone
-              </label>
-              <input
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="Phone"
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
               />
             </div>

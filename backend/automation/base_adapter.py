@@ -49,12 +49,14 @@ def get_adapter(ats_platform: str) -> BaseATSAdapter:
     from automation.adapters.generic import GenericAdapter
     from automation.adapters.greenhouse import GreenhouseAdapter
     from automation.adapters.lever import LeverAdapter
+    from automation.adapters.linkedin import LinkedInAdapter
     from automation.adapters.workday import WorkdayAdapter
 
     adapters: dict[str, type[BaseATSAdapter]] = {
         "greenhouse": GreenhouseAdapter,
         "lever": LeverAdapter,
         "workday": WorkdayAdapter,
+        "linkedin": LinkedInAdapter,
     }
     adapter_class = adapters.get(ats_platform, GenericAdapter)
     return adapter_class()

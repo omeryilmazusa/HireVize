@@ -7,10 +7,11 @@ from playwright.async_api import async_playwright
 from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.dependencies import get_db
+from app.config import settings
+from app.dependencies import get_current_user, get_db
 from app.models.application import Application
 from app.models.job import Job
-from app.routers._helpers import get_default_user
+from app.models.user import User
 from app.schemas.job import JobCreate, JobResponse
 from app.services.job_scraper import scrape_job
 
@@ -45,8 +46,11 @@ async def list_jobs(
 
 
 @router.post("", response_model=JobResponse, status_code=201)
-async def create_job(data: JobCreate, db: AsyncSession = Depends(get_db)):
-    user = await get_default_user(db)
+async def create_job(
+    data: JobCreate,
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
 
     # Duplicate check
     existing = await db.execute(
@@ -64,7 +68,7 @@ async def create_job(data: JobCreate, db: AsyncSession = Depends(get_db)):
     scrape_error = None
     try:
         async with async_playwright() as p:
-            browser = await p.chromium.launch(headless=True)
+            browser = await p.chromium.launch(headless=settings.playwright_headless, slow_mo=300)
             context = await browser.new_context(
                 user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
             )

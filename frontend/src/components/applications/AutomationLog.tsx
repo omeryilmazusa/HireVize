@@ -1,16 +1,9 @@
 "use client";
 
-interface LogEntry {
-  step: number;
-  action: string;
-  timestamp: string;
-  success?: boolean;
-  details?: string;
-}
+import type { LogEntry } from "@/types/application";
 
-export function AutomationLog({ applicationId }: { applicationId: string }) {
-  // TODO: fetch log from application detail
-  const entries: LogEntry[] = [];
+export function AutomationLog({ log }: { log: LogEntry[] | null }) {
+  const entries = log ?? [];
 
   if (entries.length === 0) {
     return (
@@ -27,15 +20,24 @@ export function AutomationLog({ applicationId }: { applicationId: string }) {
       <div className="space-y-2">
         {entries.map((entry) => (
           <div key={entry.step} className="flex items-start gap-3 text-sm">
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-100 text-xs font-medium">
-              {entry.step}
+            <span
+              className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-medium ${
+                entry.success === false
+                  ? "bg-red-100 text-red-700"
+                  : "bg-green-100 text-green-700"
+              }`}
+            >
+              {entry.success === false ? "\u2717" : "\u2713"}
             </span>
-            <div>
+            <div className="min-w-0">
               <p className="font-medium text-gray-900">{entry.action}</p>
               {entry.details && (
-                <p className="text-gray-500">{entry.details}</p>
+                <p className="truncate text-gray-500">{entry.details}</p>
               )}
-              <p className="text-xs text-gray-400">{entry.timestamp}</p>
+              <p className="text-xs text-gray-400">
+                Step {entry.step} &mdash;{" "}
+                {new Date(entry.timestamp).toLocaleTimeString()}
+              </p>
             </div>
           </div>
         ))}

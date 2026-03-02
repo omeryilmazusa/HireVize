@@ -13,6 +13,7 @@ export class ApiError extends Error {
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE_URL}${path}`, {
+    credentials: "include",
     headers: { "Content-Type": "application/json" },
     ...options,
   });
@@ -42,10 +43,12 @@ export const api = {
   delete: (path: string) => request(path, { method: "DELETE" }),
 
   upload: <T>(path: string, formData: FormData) =>
-    fetch(`${BASE_URL}${path}`, { method: "POST", body: formData }).then(
-      async (res) => {
-        if (!res.ok) throw new Error(`Upload error: ${res.status}`);
-        return res.json() as Promise<T>;
-      }
-    ),
+    fetch(`${BASE_URL}${path}`, {
+      method: "POST",
+      body: formData,
+      credentials: "include",
+    }).then(async (res) => {
+      if (!res.ok) throw new Error(`Upload error: ${res.status}`);
+      return res.json() as Promise<T>;
+    }),
 };

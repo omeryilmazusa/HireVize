@@ -2,17 +2,20 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/lib/auth";
 
 const navItems = [
-  { href: "/dashboard", label: "Dashboard", icon: "grid" },
-  { href: "/jobs", label: "Jobs", icon: "briefcase" },
-  { href: "/resumes", label: "Resumes", icon: "file-text" },
-  { href: "/applications", label: "Applications", icon: "send" },
-  { href: "/settings", label: "Settings", icon: "settings" },
+  { href: "/dashboard", label: "Dashboard" },
+  { href: "/jobs", label: "Jobs" },
+  { href: "/resumes", label: "Resumes" },
+  { href: "/applications", label: "Applications" },
+  { href: "/profile", label: "Profile" },
+  { href: "/settings", label: "Settings" },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { logout } = useAuth();
 
   return (
     <aside className="flex w-64 flex-col border-r border-gray-200 bg-white">
@@ -37,6 +40,14 @@ export function Sidebar() {
           );
         })}
       </nav>
+      <div className="border-t border-gray-200 px-3 py-4">
+        <button
+          onClick={logout}
+          className="flex w-full items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors"
+        >
+          Logout
+        </button>
+      </div>
     </aside>
   );
 }

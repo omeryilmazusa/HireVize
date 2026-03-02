@@ -16,6 +16,8 @@ export function ApplicationDetail({
   const { application, isLoading, mutate } = useApplication(applicationId);
   const router = useRouter();
   const [updating, setUpdating] = useState(false);
+  const [applying, setApplying] = useState(false);
+  const [applyError, setApplyError] = useState<string | null>(null);
 
   if (isLoading) {
     return (
@@ -57,6 +59,23 @@ export function ApplicationDetail({
     }
   };
 
+  const handleAutoApply = async () => {
+    setApplying(true);
+    setApplyError(null);
+    try {
+      await api.post(`/api/v1/applications/${applicationId}/submit`, {});
+      mutate();
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Auto-apply failed";
+      setApplyError(message);
+      console.error("Auto-apply failed:", err);
+    } finally {
+      setApplying(false);
+    }
+  };
+
+  const canAutoApply = application.status === "pending" || application.status === "failed";
+
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-6">
       <div className="mb-4 flex items-start justify-between">
@@ -69,6 +88,15 @@ export function ApplicationDetail({
         </div>
         <div className="flex items-center gap-2">
           <StatusBadge status={application.status} />
+          {canAutoApply && (
+            <button
+              onClick={handleAutoApply}
+              disabled={applying}
+              className="rounded-lg bg-primary-600 px-3 py-1 text-xs font-medium text-white hover:bg-primary-700 disabled:opacity-50"
+            >
+              {applying ? "Applying..." : "Auto Apply"}
+            </button>
+          )}
           <button
             onClick={handleDelete}
             className="rounded-lg border border-red-200 px-3 py-1 text-xs font-medium text-red-600 hover:bg-red-50"
@@ -135,6 +163,12 @@ export function ApplicationDetail({
         {application.error_message && (
           <div className="rounded bg-red-50 p-3 text-red-600">
             Error: {application.error_message}
+          </div>
+        )}
+
+        {applyError && (
+          <div className="rounded bg-red-50 p-3 text-red-600">
+            Auto-apply error: {applyError}
           </div>
         )}
 

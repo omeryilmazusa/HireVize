@@ -1,3 +1,4 @@
+import logging
 from typing import Optional
 from uuid import UUID
 
@@ -6,15 +7,18 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from app.dependencies import get_db
+from app.dependencies import get_current_user, get_db
 from app.models.application import Application
 from app.models.job import Job
-from app.routers._helpers import get_default_user
+from app.models.user import User
 from app.schemas.application import (
     ApplicationCreate,
     ApplicationResponse,
     ApplicationStatusUpdate,
 )
+from app.services.auto_applier import auto_apply
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/applications", tags=["applications"])
 
@@ -46,8 +50,11 @@ async def list_applications(
 
 
 @router.post("", response_model=ApplicationResponse, status_code=201)
-async def create_application(data: ApplicationCreate, db: AsyncSession = Depends(get_db)):
-    user = await get_default_user(db)
+async def create_application(
+    data: ApplicationCreate,
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
 
     # Verify the job exists
     job_result = await db.execute(select(Job).where(Job.id == data.job_id))
@@ -58,7 +65,6 @@ async def create_application(data: ApplicationCreate, db: AsyncSession = Depends
     application = Application(
         user_id=user.id,
         job_id=data.job_id,
-        tailored_resume_id=data.tailored_resume_id,
         cover_letter=data.cover_letter,
         form_answers=data.form_answers,
         status="pending",
@@ -90,19 +96,31 @@ async def get_application(application_id: UUID, db: AsyncSession = Depends(get_d
     return resp
 
 
-@router.post("/{application_id}/submit", response_model=ApplicationResponse, status_code=202)
+@router.post("/{application_id}/submit", response_model=ApplicationResponse)
 async def submit_application(application_id: UUID, db: AsyncSession = Depends(get_db)):
     result = await db.execute(
-        select(Application).where(Application.id == application_id)
+        select(Application).options(selectinload(Application.job)).where(
+            Application.id == application_id
+        )
     )
     application = result.scalar_one_or_none()
     if not application:
         raise HTTPException(status_code=404, detail="Application not found")
 
-    application.status = "submitting"
-    await db.commit()
-    await db.refresh(application)
-    return application
+    if application.status not in ("pending", "failed"):
+        raise HTTPException(
+            status_code=400,
+            detail=f"Cannot submit application with status '{application.status}'",
+        )
+
+    logger.info("Starting auto-apply for application %s", application_id)
+    updated = await auto_apply(application_id, db)
+
+    resp = ApplicationResponse.model_validate(updated)
+    if application.job:
+        resp.company_name = application.job.company_name
+        resp.job_title = application.job.job_title
+    return resp
 
 
 @router.put("/{application_id}/status", response_model=ApplicationResponse)

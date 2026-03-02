@@ -6,21 +6,33 @@ from pydantic import BaseModel
 
 
 class UserUpdate(BaseModel):
-    name: Optional[str] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
     email: Optional[str] = None
-    phone: Optional[str] = None
+    phones: Optional[list] = None
     linkedin_url: Optional[str] = None
     portfolio_url: Optional[str] = None
+    addresses: Optional[list] = None
+    candidate_answers: Optional[dict] = None
+    eeo: Optional[dict] = None
+    veteran_status: Optional[dict] = None
+    disability_status: Optional[dict] = None
     preferences: Optional[dict] = None
 
 
 class UserResponse(BaseModel):
     id: UUID
-    name: str
+    first_name: str
+    last_name: str
     email: str
-    phone: Optional[str] = None
+    phones: Optional[list] = None
     linkedin_url: Optional[str] = None
     portfolio_url: Optional[str] = None
+    addresses: Optional[list] = None
+    candidate_answers: Optional[dict] = None
+    eeo: Optional[dict] = None
+    veteran_status: Optional[dict] = None
+    disability_status: Optional[dict] = None
     preferences: dict
     created_at: datetime
     updated_at: datetime

@@ -24,20 +24,6 @@ async def scrape_job_task(ctx: dict, job_id: str) -> dict:
     return {"status": "completed", "job_id": job_id}
 
 
-async def tailor_resume_task(ctx: dict, job_id: str, base_resume_id: str, model: str | None = None) -> dict:
-    """Generate a tailored resume using AI.
-
-    1. Load job description and base resume from database
-    2. Call AI service to generate tailored sections
-    3. Store the tailored resume record
-    """
-    async with async_session() as db:
-        # TODO: load data, call AI, store result
-        pass
-
-    return {"status": "completed", "job_id": job_id}
-
-
 async def submit_application_task(ctx: dict, application_id: str) -> dict:
     """Submit a job application using Playwright.
 

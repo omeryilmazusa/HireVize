@@ -26,5 +26,4 @@ class Job(UUIDMixin, TimestampMixin, Base):
     raw_html: Mapped[Optional[str]] = mapped_column(Text)
 
     user = relationship("User", back_populates="jobs")
-    tailored_resumes = relationship("TailoredResume", back_populates="job", cascade="all, delete-orphan")
     application = relationship("Application", back_populates="job", uselist=False, cascade="all, delete-orphan")

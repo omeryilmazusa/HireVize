@@ -14,9 +14,6 @@ class Application(UUIDMixin, TimestampMixin, Base):
 
     user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
     job_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("jobs.id"), nullable=False, unique=True)
-    tailored_resume_id: Mapped[Optional[uuid.UUID]] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("tailored_resumes.id")
-    )
     status: Mapped[str] = mapped_column(String(50), nullable=False, default="pending", server_default="pending")
     cover_letter: Mapped[Optional[str]] = mapped_column(Text)
     form_answers: Mapped[Optional[dict]] = mapped_column(JSONB)
@@ -27,4 +24,3 @@ class Application(UUIDMixin, TimestampMixin, Base):
 
     user = relationship("User", back_populates="applications")
     job = relationship("Job", back_populates="application")
-    tailored_resume = relationship("TailoredResume", back_populates="application")

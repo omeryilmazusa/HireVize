@@ -15,7 +15,6 @@ class ResumeCreate(ResumeBase):
 
 class ResumeUpdate(BaseModel):
     title: Optional[str] = None
-    parsed_sections: Optional[dict] = None
 
 
 class ResumeResponse(ResumeBase):
@@ -23,8 +22,6 @@ class ResumeResponse(ResumeBase):
     file_name: str
     file_type: str
     is_primary: bool
-    parsed_sections: Optional[dict] = None
-    raw_text: Optional[str] = None
     created_at: datetime
     updated_at: datetime
 

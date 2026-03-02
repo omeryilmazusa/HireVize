@@ -118,6 +118,8 @@ def detect_ats_platform(url: str, html: str) -> str:
         return "lever"
     if "myworkdayjobs.com" in url_lower or "workday" in url_lower:
         return "workday"
+    if "linkedin.com" in url_lower:
+        return "linkedin"
     return "unknown"
 
 

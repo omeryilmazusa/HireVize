@@ -1,7 +1,6 @@
 export interface Application {
   id: string;
   job_id: string;
-  tailored_resume_id: string | null;
   status: string;
   cover_letter: string | null;
   form_answers: Record<string, unknown> | null;

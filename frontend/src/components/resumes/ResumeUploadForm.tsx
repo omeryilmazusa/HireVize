@@ -43,7 +43,7 @@ export function ResumeUploadForm() {
         />
         <input
           type="file"
-          accept=".pdf,.docx"
+          accept=".pdf"
           onChange={(e) => setFile(e.target.files?.[0] || null)}
           required
           className="text-sm text-gray-500"

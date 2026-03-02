@@ -15,6 +15,11 @@ class Settings(BaseSettings):
 
     storage_path: str = "./storage"
 
+    # JWT / Auth
+    secret_key: str = "change-me-in-production"
+    jwt_algorithm: str = "HS256"
+    access_token_expire_minutes: int = 60 * 24 * 7  # 7 days
+
     model_config = {"env_file": ".env", "env_file_encoding": "utf-8", "extra": "ignore"}
 
 

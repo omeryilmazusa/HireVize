@@ -5,12 +5,13 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from app.dependencies import get_db
+from app.dependencies import get_current_user, get_db
 from app.models.application import Application
 from app.models.job import Job
+from app.models.user import User
 from app.schemas.dashboard import DashboardStats, RecentApplication, TimelineEntry
 
-router = APIRouter(prefix="/dashboard", tags=["dashboard"])
+router = APIRouter(prefix="/dashboard", tags=["dashboard"], dependencies=[Depends(get_current_user)])
 
 
 @router.get("/stats", response_model=DashboardStats)

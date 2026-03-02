@@ -3,6 +3,7 @@
 import { PageContainer } from "@/components/layout/PageContainer";
 import { ResumeUploadForm } from "@/components/resumes/ResumeUploadForm";
 import { ResumeList } from "@/components/resumes/ResumeList";
+import { ApplicationProfileForm } from "@/components/resumes/ApplicationProfileForm";
 
 export default function ResumesPage() {
   return (
@@ -11,6 +12,8 @@ export default function ResumesPage() {
       <div className="mt-8">
         <ResumeList />
       </div>
+      <hr className="my-10 border-gray-200" />
+      <ApplicationProfileForm />
     </PageContainer>
   );
 }

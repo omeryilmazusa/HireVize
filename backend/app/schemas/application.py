@@ -7,7 +7,6 @@ from pydantic import BaseModel
 
 class ApplicationCreate(BaseModel):
     job_id: UUID
-    tailored_resume_id: Optional[UUID] = None
     cover_letter: Optional[str] = None
     form_answers: Optional[dict] = None
 
@@ -20,7 +19,6 @@ class ApplicationStatusUpdate(BaseModel):
 class ApplicationResponse(BaseModel):
     id: UUID
     job_id: UUID
-    tailored_resume_id: Optional[UUID] = None
     status: str
     cover_letter: Optional[str] = None
     form_answers: Optional[dict] = None
