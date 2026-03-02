@@ -13,7 +13,7 @@ export default function ApplicationDetailPage({
   const { application } = useApplication(params.id);
 
   const logEntries = application?.automation_log
-    ? (application.automation_log as { entries?: unknown[] }).entries ?? null
+    ? (application.automation_log as unknown as { entries?: unknown[] }).entries ?? null
     : null;
 
   return (

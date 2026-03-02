@@ -21,7 +21,7 @@ export function ResumeSectionEditor({ resumeId }: { resumeId: string }) {
     );
   }
 
-  const sections = resume.parsed_sections;
+  const sections = (resume as unknown as Record<string, unknown>).parsed_sections as Record<string, unknown> | undefined;
 
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-6">
