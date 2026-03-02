@@ -6,5 +6,5 @@ runConfig:
   maxInstances: 2
 
 env:
-  - variable: NEXT_PUBLIC_API_URL
-    value: ""
+  - variable: BACKEND_URL
+    value: https://hirevize-api-492152296979.us-central1.run.app
