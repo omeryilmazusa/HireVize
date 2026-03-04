@@ -94,7 +94,7 @@ export function ApplicationDetail({
     }
   };
 
-  const canApply = application.status === "pending" || application.status === "failed";
+  const canApply = application.status === "added" || application.status === "pending" || application.status === "failed";
   const isApplying = application.status === "applying";
 
   return (

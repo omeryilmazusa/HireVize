@@ -132,7 +132,7 @@ async def start_apply(
     if not application:
         raise HTTPException(status_code=404, detail="Application not found")
 
-    if application.status not in ("pending", "failed"):
+    if application.status not in ("added", "pending", "failed"):
         raise HTTPException(
             status_code=400,
             detail=f"Cannot start apply for application with status '{application.status}'",

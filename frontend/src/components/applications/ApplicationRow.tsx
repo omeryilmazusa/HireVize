@@ -21,7 +21,7 @@ export function ApplicationRow({
   const [applying, setApplying] = useState(false);
 
   const canApply =
-    application.status === "pending" || application.status === "failed";
+    application.status === "added" || application.status === "pending" || application.status === "failed";
 
   const handleApplyNow = async (e: React.MouseEvent) => {
     e.preventDefault();
