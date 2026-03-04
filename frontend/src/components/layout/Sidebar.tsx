@@ -10,6 +10,7 @@ const navItems = [
   { href: "/resumes", label: "Resumes" },
   { href: "/applications", label: "Applications" },
   { href: "/profile", label: "Profile" },
+  { href: "/extension", label: "Extension" },
   { href: "/settings", label: "Settings" },
 ];
 
