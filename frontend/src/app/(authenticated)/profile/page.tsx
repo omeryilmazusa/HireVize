@@ -77,10 +77,13 @@ export default function ProfilePage() {
   if (!profile) {
     return (
       <PageContainer>
-        <div className="text-center text-gray-500">Loading...</div>
+        <div className="text-center text-navy-500">Loading...</div>
       </PageContainer>
     );
   }
+
+  const inputClass =
+    "w-full rounded-lg border border-border-card bg-white px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500";
 
   return (
     <PageContainer>
@@ -96,33 +99,33 @@ export default function ProfilePage() {
         </div>
       )}
 
-      <section className="rounded-lg border border-gray-200 bg-white p-6">
-        <h3 className="mb-4 text-lg font-semibold">Profile Information</h3>
+      <section className="rounded-card border border-border-card bg-white p-6">
+        <h3 className="mb-4 font-display text-lg font-bold text-navy-900">Profile Information</h3>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+            <label className="mb-1 block text-sm font-medium text-navy-800">
               First Name
             </label>
             <input
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
               placeholder="First Name"
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+              className={inputClass}
             />
           </div>
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+            <label className="mb-1 block text-sm font-medium text-navy-800">
               Last Name
             </label>
             <input
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               placeholder="Last Name"
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+              className={inputClass}
             />
           </div>
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+            <label className="mb-1 block text-sm font-medium text-navy-800">
               Email
             </label>
             <input
@@ -130,39 +133,39 @@ export default function ProfilePage() {
               onChange={(e) => setEmail(e.target.value)}
               type="email"
               placeholder="Email"
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+              className={inputClass}
             />
           </div>
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+            <label className="mb-1 block text-sm font-medium text-navy-800">
               LinkedIn URL
             </label>
             <input
               value={linkedinUrl}
               onChange={(e) => setLinkedinUrl(e.target.value)}
               placeholder="https://linkedin.com/in/..."
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+              className={inputClass}
             />
           </div>
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+            <label className="mb-1 block text-sm font-medium text-navy-800">
               Portfolio URL
             </label>
             <input
               value={portfolioUrl}
               onChange={(e) => setPortfolioUrl(e.target.value)}
               placeholder="https://..."
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+              className={inputClass}
             />
           </div>
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+            <label className="mb-1 block text-sm font-medium text-navy-800">
               Authorized to work in the US?
             </label>
             <select
               value={workAuthorization}
               onChange={(e) => setWorkAuthorization(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+              className={inputClass}
             >
               <option value="">-- Select --</option>
               <option value="Yes">Yes</option>
@@ -170,13 +173,13 @@ export default function ProfilePage() {
             </select>
           </div>
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+            <label className="mb-1 block text-sm font-medium text-navy-800">
               Required Technical Challenge?
             </label>
             <select
               value={technicalChallenge}
               onChange={(e) => setTechnicalChallenge(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+              className={inputClass}
             >
               <option value="">-- Select --</option>
               <option value="Yes">Yes</option>
@@ -184,13 +187,13 @@ export default function ProfilePage() {
             </select>
           </div>
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+            <label className="mb-1 block text-sm font-medium text-navy-800">
               Are you eligible to work in the USA?
             </label>
             <select
               value={eligibleToWork}
               onChange={(e) => setEligibleToWork(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+              className={inputClass}
             >
               <option value="">-- Select --</option>
               <option value="Yes">Yes</option>
@@ -198,13 +201,13 @@ export default function ProfilePage() {
             </select>
           </div>
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+            <label className="mb-1 block text-sm font-medium text-navy-800">
               Will you now or in the future require sponsorship?
             </label>
             <select
               value={sponsorship}
               onChange={(e) => setSponsorship(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+              className={inputClass}
             >
               <option value="">-- Select --</option>
               <option value="Yes">Yes</option>
@@ -215,7 +218,7 @@ export default function ProfilePage() {
         <button
           onClick={saveProfile}
           disabled={saving}
-          className="mt-4 rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700 disabled:opacity-50 transition-colors"
+          className="mt-4 rounded-lg bg-primary-500 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700 disabled:opacity-50 transition-colors"
         >
           {saving ? "Saving..." : "Save Profile"}
         </button>

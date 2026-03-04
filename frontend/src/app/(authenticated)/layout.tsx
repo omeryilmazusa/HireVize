@@ -14,7 +14,7 @@ export default function AuthenticatedLayout({
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <p className="text-gray-500">Loading...</p>
+        <p className="text-navy-500">Loading...</p>
       </div>
     );
   }
@@ -28,7 +28,7 @@ export default function AuthenticatedLayout({
       <Sidebar />
       <div className="flex flex-1 flex-col overflow-hidden">
         <Header />
-        <main className="flex-1 overflow-y-auto p-6">{children}</main>
+        <main className="flex-1 overflow-y-auto p-6 scrollbar-thin">{children}</main>
       </div>
     </div>
   );

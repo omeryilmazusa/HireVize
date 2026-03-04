@@ -64,12 +64,12 @@ const RACE_OPTIONS = [
 /* ───────────── helpers ───────────── */
 
 const inputClass =
-  "w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500";
+  "w-full rounded-lg border border-border-card bg-white px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500";
 
 const selectClass =
-  "w-full rounded-lg border border-gray-300 px-3 py-2 text-sm bg-white focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500";
+  "w-full rounded-lg border border-border-card bg-white px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500";
 
-const labelClass = "mb-1 block text-sm font-medium text-gray-700";
+const labelClass = "mb-1 block text-sm font-medium text-navy-800";
 
 function CollapsibleSection({
   title,
@@ -82,15 +82,15 @@ function CollapsibleSection({
 }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
-    <section className="rounded-lg border border-gray-200 bg-white">
+    <section className="rounded-card border border-border-card bg-white">
       <button
         type="button"
         onClick={() => setOpen(!open)}
         className="flex w-full items-center justify-between px-6 py-4 text-left"
       >
-        <h3 className="text-lg font-semibold">{title}</h3>
+        <h3 className="font-display text-lg font-bold text-navy-900">{title}</h3>
         <svg
-          className={`h-5 w-5 text-gray-500 transition-transform ${open ? "rotate-180" : ""}`}
+          className={`h-5 w-5 text-navy-500 transition-transform ${open ? "rotate-180" : ""}`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -98,7 +98,7 @@ function CollapsibleSection({
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
-      {open && <div className="border-t border-gray-200 px-6 py-5">{children}</div>}
+      {open && <div className="border-t border-border-card px-6 py-5">{children}</div>}
     </section>
   );
 }
@@ -235,13 +235,13 @@ export function ApplicationProfileForm() {
   };
 
   if (loading) {
-    return <div className="text-center text-gray-500">Loading profile...</div>;
+    return <div className="text-center text-navy-500">Loading profile...</div>;
   }
 
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-bold">Application Profile</h2>
-      <p className="text-sm text-gray-500">
+      <h2 className="font-display text-xl font-bold text-navy-900">Application Profile</h2>
+      <p className="text-sm text-navy-500">
         Fill out the information below once. It will be used to auto-fill job applications.
       </p>
 
@@ -282,7 +282,7 @@ export function ApplicationProfileForm() {
               <select
                 value={p.type}
                 onChange={(e) => updatePhone(i, "type", e.target.value)}
-                className="w-20 shrink-0 rounded-lg border border-gray-300 px-2 py-2 text-xs bg-white focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+                className="w-20 shrink-0 rounded-lg border border-border-card bg-white px-2 py-2 text-xs focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
               >
                 {PHONE_TYPES.map((t) => (
                   <option key={t}>{t}</option>
@@ -292,7 +292,7 @@ export function ApplicationProfileForm() {
                 value={p.number}
                 onChange={(e) => updatePhone(i, "number", e.target.value)}
                 placeholder="(555) 555-5555"
-                className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+                className="flex-1 rounded-lg border border-border-card bg-white px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
               />
               {phones.length > 1 && (
                 <button type="button" onClick={() => removePhone(i)} className="text-red-500 hover:text-red-700 text-sm shrink-0">
@@ -301,7 +301,7 @@ export function ApplicationProfileForm() {
               )}
             </div>
           ))}
-          <button type="button" onClick={addPhone} className="mt-2 text-sm text-primary-600 hover:text-primary-700">
+          <button type="button" onClick={addPhone} className="mt-2 text-sm text-primary-500 hover:text-primary-700">
             + Add phone
           </button>
         </div>
@@ -310,10 +310,10 @@ export function ApplicationProfileForm() {
         <div className="mt-4">
           <label className={labelClass}>Addresses</label>
           {addresses.map((a, i) => (
-            <div key={i} className="mt-3 rounded-lg border border-gray-100 bg-gray-50 p-3">
+            <div key={i} className="mt-3 rounded-lg border border-border-subtle bg-surface-subtle p-3">
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div className="sm:col-span-2">
-                  <label className="mb-1 block text-xs font-medium text-gray-500">Street Address</label>
+                  <label className="mb-1 block text-xs font-medium text-navy-500">Street Address</label>
                   <input
                     value={a.street}
                     onChange={(e) => updateAddress(i, "street", e.target.value)}
@@ -322,7 +322,7 @@ export function ApplicationProfileForm() {
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-gray-500">City</label>
+                  <label className="mb-1 block text-xs font-medium text-navy-500">City</label>
                   <input
                     value={a.city}
                     onChange={(e) => updateAddress(i, "city", e.target.value)}
@@ -332,7 +332,7 @@ export function ApplicationProfileForm() {
                 </div>
                 <div className="flex gap-2">
                   <div className="flex-1">
-                    <label className="mb-1 block text-xs font-medium text-gray-500">State</label>
+                    <label className="mb-1 block text-xs font-medium text-navy-500">State</label>
                     <select
                       value={a.state}
                       onChange={(e) => updateAddress(i, "state", e.target.value)}
@@ -345,7 +345,7 @@ export function ApplicationProfileForm() {
                     </select>
                   </div>
                   <div className="w-28 shrink-0">
-                    <label className="mb-1 block text-xs font-medium text-gray-500">ZIP</label>
+                    <label className="mb-1 block text-xs font-medium text-navy-500">ZIP</label>
                     <input
                       value={a.zip}
                       onChange={(e) => updateAddress(i, "zip", e.target.value)}
@@ -362,7 +362,7 @@ export function ApplicationProfileForm() {
               )}
             </div>
           ))}
-          <button type="button" onClick={addAddress} className="mt-2 text-sm text-primary-600 hover:text-primary-700">
+          <button type="button" onClick={addAddress} className="mt-2 text-sm text-primary-500 hover:text-primary-700">
             + Add address
           </button>
         </div>
@@ -434,7 +434,7 @@ export function ApplicationProfileForm() {
 
       {/* ── Section 3: Voluntary EEO Information ── */}
       <CollapsibleSection title="Voluntary EEO Information">
-        <p className="mb-4 text-sm text-gray-500">
+        <p className="mb-4 text-sm text-navy-500">
           The employer is subject to certain governmental recordkeeping and reporting requirements
           for the administration of civil rights laws and regulations. In order to comply, the
           employer invites employees and applicants to voluntarily self-identify their race/ethnicity
@@ -466,7 +466,7 @@ export function ApplicationProfileForm() {
 
       {/* ── Section 4: Veteran Self-Identification ── */}
       <CollapsibleSection title="Veteran Self-Identification">
-        <p className="mb-4 text-sm text-gray-500">
+        <p className="mb-4 text-sm text-navy-500">
           This employer is a Government contractor subject to the Vietnam Era Veterans&apos;
           Readjustment Assistance Act of 1974 (VEVRAA). VEVRAA requires Government contractors to
           take affirmative action to employ and advance in employment protected veterans. To comply,
@@ -506,7 +506,7 @@ export function ApplicationProfileForm() {
 
       {/* ── Section 5: Voluntary Self-Identification of Disability ── */}
       <CollapsibleSection title="Voluntary Self-Identification of Disability">
-        <p className="mb-4 text-sm text-gray-500">
+        <p className="mb-4 text-sm text-navy-500">
           OMB Control Number 1250-0005 &mdash; This employer is a Government contractor subject to
           Section 503 of the Rehabilitation Act of 1973. We are required to take affirmative action
           to employ and advance in employment individuals with disabilities. To help us measure the
@@ -541,7 +541,7 @@ export function ApplicationProfileForm() {
           type="button"
           onClick={handleSave}
           disabled={saving}
-          className="rounded-lg bg-primary-600 px-6 py-2.5 text-sm font-medium text-white hover:bg-primary-700 disabled:opacity-50 transition-colors"
+          className="rounded-lg bg-primary-500 px-6 py-2.5 text-sm font-medium text-white hover:bg-primary-700 disabled:opacity-50 transition-colors"
         >
           {saving ? "Saving..." : "Save All"}
         </button>

@@ -6,8 +6,8 @@ export function EmptyState({
   action?: React.ReactNode;
 }) {
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-8 text-center">
-      <p className="text-gray-500">{message}</p>
+    <div className="rounded-card border border-border-card bg-white p-8 text-center">
+      <p className="text-navy-500">{message}</p>
       {action && <div className="mt-4">{action}</div>}
     </div>
   );

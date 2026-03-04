@@ -41,17 +41,17 @@ export function ApplicationRow({
   };
 
   return (
-    <tr className="hover:bg-gray-50">
-      <td className="px-4 py-3 font-medium text-gray-900">
+    <tr className="hover:bg-surface-hover">
+      <td className="px-4 py-3 font-medium text-navy-900">
         {application.company_name || "Unknown"}
       </td>
-      <td className="px-4 py-3 text-gray-600">
+      <td className="px-4 py-3 text-navy-800">
         {application.job_title || "Untitled"}
       </td>
       <td className="px-4 py-3">
         <StatusBadge status={application.status} />
       </td>
-      <td className="px-4 py-3 text-gray-500">
+      <td className="px-4 py-3 text-navy-500">
         {new Date(application.created_at).toLocaleDateString()}
       </td>
       <td className="px-4 py-3">
@@ -60,14 +60,14 @@ export function ApplicationRow({
             <button
               onClick={handleApplyNow}
               disabled={applying}
-              className="rounded bg-primary-600 px-2 py-1 text-xs font-medium text-white hover:bg-primary-700 disabled:opacity-50"
+              className="rounded bg-primary-500 px-2 py-1 text-xs font-medium text-white hover:bg-primary-700 disabled:opacity-50"
             >
               {applying ? "..." : "Apply Now"}
             </button>
           )}
           <Link
             href={`/applications/${application.id}`}
-            className="text-primary-600 hover:text-primary-700 text-sm font-medium"
+            className="text-primary-500 hover:text-primary-700 text-sm font-medium"
           >
             View
           </Link>

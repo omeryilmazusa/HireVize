@@ -9,7 +9,7 @@
     "https://jobs.lever.co/*",
     "https://*.myworkdayjobs.com/*",
     "https://www.linkedin.com/jobs/*",
-    "http://localhost:8000/*",
+    "https://hirevize-api-492152296979.us-central1.run.app/*",
     "*://*/*"
   ],
   "background": {

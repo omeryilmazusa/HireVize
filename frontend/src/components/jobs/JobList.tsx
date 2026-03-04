@@ -7,12 +7,12 @@ export function JobList() {
   const { jobs, isLoading } = useJobs();
 
   if (isLoading) {
-    return <div className="text-center text-gray-500">Loading jobs...</div>;
+    return <div className="text-center text-navy-500">Loading jobs...</div>;
   }
 
   if (!jobs || jobs.length === 0) {
     return (
-      <div className="rounded-lg border border-gray-200 bg-white p-8 text-center text-gray-500">
+      <div className="rounded-card border border-border-card bg-white p-8 text-center text-navy-500">
         No jobs yet. Paste a URL above to get started.
       </div>
     );

@@ -7,12 +7,12 @@ export function ResumeList() {
   const { resumes, isLoading } = useResumes();
 
   if (isLoading) {
-    return <div className="text-center text-gray-500">Loading resumes...</div>;
+    return <div className="text-center text-navy-500">Loading resumes...</div>;
   }
 
   if (!resumes || resumes.length === 0) {
     return (
-      <div className="rounded-lg border border-gray-200 bg-white p-8 text-center text-gray-500">
+      <div className="rounded-card border border-border-card bg-white p-8 text-center text-navy-500">
         No resumes uploaded yet.
       </div>
     );

@@ -28,3 +28,4 @@ class User(UUIDMixin, TimestampMixin, Base):
     resumes = relationship("Resume", back_populates="user", cascade="all, delete-orphan")
     jobs = relationship("Job", back_populates="user", cascade="all, delete-orphan")
     applications = relationship("Application", back_populates="user", cascade="all, delete-orphan")
+    interviews = relationship("Interview", back_populates="user", cascade="all, delete-orphan")

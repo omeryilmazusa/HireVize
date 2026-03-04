@@ -3,7 +3,7 @@ export function LoadingSpinner({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
   return (
     <div className="flex justify-center">
       <div
-        className={`${sizes[size]} animate-spin rounded-full border-2 border-gray-300 border-t-primary-600`}
+        className={`${sizes[size]} animate-spin rounded-full border-2 border-border-card border-t-primary-500`}
       />
     </div>
   );

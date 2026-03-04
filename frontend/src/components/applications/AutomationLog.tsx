@@ -7,16 +7,16 @@ export function AutomationLog({ log }: { log: LogEntry[] | null }) {
 
   if (entries.length === 0) {
     return (
-      <div className="rounded-lg border border-gray-200 bg-white p-6">
-        <h3 className="mb-4 text-lg font-semibold">Automation Log</h3>
-        <p className="text-sm text-gray-500">No automation actions recorded yet.</p>
+      <div className="rounded-card border border-border-card bg-white p-6">
+        <h3 className="mb-4 font-display text-lg font-bold text-navy-900">Automation Log</h3>
+        <p className="text-sm text-navy-500">No automation actions recorded yet.</p>
       </div>
     );
   }
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-6">
-      <h3 className="mb-4 text-lg font-semibold">Automation Log</h3>
+    <div className="rounded-card border border-border-card bg-white p-6">
+      <h3 className="mb-4 font-display text-lg font-bold text-navy-900">Automation Log</h3>
       <div className="space-y-2">
         {entries.map((entry) => (
           <div key={entry.step} className="flex items-start gap-3 text-sm">
@@ -30,11 +30,11 @@ export function AutomationLog({ log }: { log: LogEntry[] | null }) {
               {entry.success === false ? "\u2717" : "\u2713"}
             </span>
             <div className="min-w-0">
-              <p className="font-medium text-gray-900">{entry.action}</p>
+              <p className="font-medium text-navy-900">{entry.action}</p>
               {entry.details && (
-                <p className="truncate text-gray-500">{entry.details}</p>
+                <p className="truncate text-navy-500">{entry.details}</p>
               )}
-              <p className="text-xs text-gray-400">
+              <p className="text-xs text-navy-500">
                 Step {entry.step} &mdash;{" "}
                 {new Date(entry.timestamp).toLocaleTimeString()}
               </p>

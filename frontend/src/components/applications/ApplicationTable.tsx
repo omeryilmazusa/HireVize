@@ -38,7 +38,7 @@ export function ApplicationTable() {
   }, [applications, search, statusFilter]);
 
   if (isLoading) {
-    return <div className="text-center text-gray-500">Loading...</div>;
+    return <div className="text-center text-navy-500">Loading...</div>;
   }
 
   return (
@@ -47,7 +47,7 @@ export function ApplicationTable() {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <div className="relative sm:min-w-[350px] flex-1">
           <svg
-            className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400"
+            className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-navy-500"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -64,7 +64,7 @@ export function ApplicationTable() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by company or position..."
-            className="w-full rounded-lg border border-gray-300 py-2.5 pl-10 pr-4 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+            className="w-full rounded-lg border border-border-card bg-white py-2.5 pl-10 pr-4 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
           />
         </div>
         <div className="flex flex-wrap gap-1.5">
@@ -75,8 +75,8 @@ export function ApplicationTable() {
               onClick={() => setStatusFilter(s)}
               className={`rounded-full px-3 py-1 text-xs font-medium capitalize transition-colors ${
                 statusFilter === s
-                  ? "bg-primary-600 text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  ? "bg-primary-500 text-white"
+                  : "bg-surface-subtle text-navy-600 hover:bg-[#EEF2FF]"
               }`}
             >
               {s}
@@ -87,32 +87,32 @@ export function ApplicationTable() {
 
       {/* Table */}
       {!applications || applications.length === 0 ? (
-        <div className="rounded-lg border border-gray-200 bg-white p-8 text-center text-gray-500">
+        <div className="rounded-card border border-border-card bg-white p-8 text-center text-navy-500">
           No applications yet.
         </div>
       ) : filtered.length === 0 ? (
-        <div className="rounded-lg border border-gray-200 bg-white p-8 text-center text-gray-500">
+        <div className="rounded-card border border-border-card bg-white p-8 text-center text-navy-500">
           No applications match your filters.
         </div>
       ) : (
-        <div className="overflow-hidden rounded-lg border border-gray-200 bg-white">
+        <div className="overflow-hidden rounded-card border border-border-card bg-white">
           <table className="w-full text-left text-sm">
-            <thead className="border-b border-gray-200 bg-gray-50">
+            <thead className="border-b border-border-card bg-surface-subtle">
               <tr>
-                <th className="px-4 py-3 font-medium text-gray-500">Company</th>
-                <th className="px-4 py-3 font-medium text-gray-500">Position</th>
-                <th className="px-4 py-3 font-medium text-gray-500">Status</th>
-                <th className="px-4 py-3 font-medium text-gray-500">Date</th>
-                <th className="px-4 py-3 font-medium text-gray-500">Actions</th>
+                <th className="px-4 py-3 font-mono text-xs font-medium uppercase tracking-wider text-navy-500">Company</th>
+                <th className="px-4 py-3 font-mono text-xs font-medium uppercase tracking-wider text-navy-500">Position</th>
+                <th className="px-4 py-3 font-mono text-xs font-medium uppercase tracking-wider text-navy-500">Status</th>
+                <th className="px-4 py-3 font-mono text-xs font-medium uppercase tracking-wider text-navy-500">Date</th>
+                <th className="px-4 py-3 font-mono text-xs font-medium uppercase tracking-wider text-navy-500">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-border-subtle">
               {filtered.map((app) => (
                 <ApplicationRow key={app.id} application={app} onMutate={mutate} />
               ))}
             </tbody>
           </table>
-          <div className="border-t border-gray-200 bg-gray-50 px-4 py-2 text-xs text-gray-500">
+          <div className="border-t border-border-card bg-surface-subtle px-4 py-2 text-xs text-navy-500">
             Showing {filtered.length} of {applications.length} application{applications.length !== 1 ? "s" : ""}
           </div>
         </div>

@@ -12,7 +12,7 @@ export default function ResumesPage() {
       <div className="mt-8">
         <ResumeList />
       </div>
-      <hr className="my-10 border-gray-200" />
+      <hr className="my-10 border-border-card" />
       <ApplicationProfileForm />
     </PageContainer>
   );

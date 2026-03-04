@@ -1,7 +1,6 @@
 import type { AutofillResult, UserProfile } from "./types";
 
-// Change this to your production URL when deploying
-const API_URL = "http://localhost:8000";
+const API_URL = "https://hirevize-api-492152296979.us-central1.run.app";
 
 async function getToken(): Promise<string | null> {
   const result = await chrome.storage.local.get("hirevize_token");

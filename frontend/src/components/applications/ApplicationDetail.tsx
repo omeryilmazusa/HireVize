@@ -26,15 +26,15 @@ export function ApplicationDetail({
 
   if (isLoading) {
     return (
-      <div className="rounded-lg border border-gray-200 bg-white p-6">
-        <p className="text-sm text-gray-500">Loading application...</p>
+      <div className="rounded-card border border-border-card bg-white p-6">
+        <p className="text-sm text-navy-500">Loading application...</p>
       </div>
     );
   }
 
   if (!application) {
     return (
-      <div className="rounded-lg border border-gray-200 bg-white p-6">
+      <div className="rounded-card border border-border-card bg-white p-6">
         <p className="text-sm text-red-500">Application not found.</p>
       </div>
     );
@@ -73,8 +73,6 @@ export function ApplicationDetail({
         {}
       );
       mutate();
-
-      // Open the career page — extension detects and auto-fills independently
       window.open(result.application_url, "_blank");
     } catch (err) {
       const message = err instanceof Error ? err.message : "Failed to start application";
@@ -100,11 +98,11 @@ export function ApplicationDetail({
   const isApplying = application.status === "applying";
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-6">
+    <div className="rounded-card border border-border-card bg-white p-6">
       <div className="mb-4 flex items-start justify-between">
         <div>
-          <h3 className="text-lg font-semibold">Application Details</h3>
-          <p className="mt-1 text-sm text-gray-500">
+          <h3 className="font-display text-lg font-bold text-navy-900">Application Details</h3>
+          <p className="mt-1 text-sm text-navy-500">
             {application.company_name || "Unknown Company"} &mdash;{" "}
             {application.job_title || "Untitled Position"}
           </p>
@@ -115,7 +113,7 @@ export function ApplicationDetail({
             <button
               onClick={handleApplyNow}
               disabled={applying}
-              className="rounded-lg bg-primary-600 px-3 py-1 text-xs font-medium text-white hover:bg-primary-700 disabled:opacity-50"
+              className="rounded-lg bg-primary-500 px-3 py-1 text-xs font-medium text-white hover:bg-primary-700 disabled:opacity-50"
             >
               {applying ? "Opening..." : "Apply Now"}
             </button>
@@ -145,14 +143,14 @@ export function ApplicationDetail({
       )}
 
       <div className="mb-4">
-        <label className="mb-1 block text-sm font-medium text-gray-700">
+        <label className="mb-1 block text-sm font-medium text-navy-800">
           Update Status
         </label>
         <select
           value={application.status}
           onChange={(e) => handleStatusChange(e.target.value)}
           disabled={updating}
-          className="rounded-lg border border-gray-300 px-3 py-2 text-sm"
+          className="rounded-lg border border-border-card px-3 py-2 text-sm"
         >
           {APPLICATION_STATUSES.map((s) => (
             <option key={s} value={s}>
@@ -164,10 +162,10 @@ export function ApplicationDetail({
 
       <div className="space-y-3 text-sm">
         <div>
-          <span className="font-medium text-gray-700">Job: </span>
+          <span className="font-medium text-navy-800">Job: </span>
           <Link
             href={`/jobs/${application.job_id}`}
-            className="text-primary-600 hover:underline"
+            className="text-primary-500 hover:underline"
           >
             View job details
           </Link>
@@ -175,8 +173,8 @@ export function ApplicationDetail({
 
         {application.submitted_at && (
           <div>
-            <span className="font-medium text-gray-700">Submitted: </span>
-            <span className="text-gray-600">
+            <span className="font-medium text-navy-800">Submitted: </span>
+            <span className="text-navy-800">
               {new Date(application.submitted_at).toLocaleString()}
             </span>
           </div>
@@ -184,15 +182,15 @@ export function ApplicationDetail({
 
         {application.notes && (
           <div>
-            <span className="font-medium text-gray-700">Notes: </span>
-            <span className="text-gray-600">{application.notes}</span>
+            <span className="font-medium text-navy-800">Notes: </span>
+            <span className="text-navy-800">{application.notes}</span>
           </div>
         )}
 
         {application.cover_letter && (
           <div>
-            <h4 className="mb-1 font-medium text-gray-700">Cover Letter</h4>
-            <div className="rounded bg-gray-50 p-3 text-gray-600 whitespace-pre-wrap">
+            <h4 className="mb-1 font-medium text-navy-800">Cover Letter</h4>
+            <div className="rounded bg-surface-subtle p-3 text-navy-800 whitespace-pre-wrap">
               {application.cover_letter}
             </div>
           </div>
@@ -211,8 +209,8 @@ export function ApplicationDetail({
         )}
 
         <div>
-          <span className="font-medium text-gray-700">Created: </span>
-          <span className="text-gray-600">
+          <span className="font-medium text-navy-800">Created: </span>
+          <span className="text-navy-800">
             {new Date(application.created_at).toLocaleString()}
           </span>
         </div>

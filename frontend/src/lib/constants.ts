@@ -25,3 +25,24 @@ export const TAILORING_STATUSES = [
   "approved",
   "rejected",
 ] as const;
+
+export const INTERVIEW_TYPES = [
+  "phone",
+  "video",
+  "onsite",
+  "technical",
+  "panel",
+] as const;
+
+export const INTERVIEW_STATUSES = [
+  "scheduled",
+  "completed",
+  "cancelled",
+  "rescheduled",
+] as const;
+
+export const INTERVIEW_RESULTS = [
+  "pending",
+  "passed",
+  "failed",
+] as const;

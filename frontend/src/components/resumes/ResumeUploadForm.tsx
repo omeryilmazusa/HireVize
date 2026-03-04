@@ -30,8 +30,8 @@ export function ResumeUploadForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-lg border border-gray-200 bg-white p-6">
-      <h3 className="mb-4 text-lg font-semibold">Upload Resume</h3>
+    <form onSubmit={handleSubmit} className="rounded-card border border-border-card bg-white p-6">
+      <h3 className="mb-4 font-display text-lg font-bold text-navy-900">Upload Resume</h3>
       <div className="flex flex-col gap-4 sm:flex-row">
         <input
           type="text"
@@ -39,19 +39,19 @@ export function ResumeUploadForm() {
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Resume title (e.g., SWE Resume v2)"
           required
-          className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none"
+          className="flex-1 rounded-lg border border-border-card bg-white px-3 py-2 text-sm focus:border-primary-500 focus:outline-none"
         />
         <input
           type="file"
           accept=".pdf"
           onChange={(e) => setFile(e.target.files?.[0] || null)}
           required
-          className="text-sm text-gray-500"
+          className="text-sm text-navy-500"
         />
         <button
           type="submit"
           disabled={loading}
-          className="rounded-lg bg-primary-600 px-6 py-2 text-sm font-medium text-white hover:bg-primary-700 disabled:opacity-50"
+          className="rounded-lg bg-primary-500 px-6 py-2 text-sm font-medium text-white hover:bg-primary-700 disabled:opacity-50"
         >
           {loading ? "Uploading..." : "Upload"}
         </button>

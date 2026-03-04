@@ -10,6 +10,7 @@ const pageTitles: Record<string, string> = {
   "/jobs": "Jobs",
   "/resumes": "Resumes",
   "/applications": "Applications",
+  "/interviews": "Interviews",
   "/settings": "Settings",
   "/profile": "Profile",
 };
@@ -26,6 +27,13 @@ export function Header() {
     Object.entries(pageTitles).find(([path]) =>
       pathname.startsWith(path)
     )?.[1] ?? "Hirevize";
+
+  const today = new Date().toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,14 +59,19 @@ export function Header() {
 
   return (
     <>
-      <header className="flex h-16 items-center justify-between border-b border-gray-200 bg-white px-6">
-        <h2 className="text-lg font-semibold">{title}</h2>
-        <button
-          onClick={() => setShowModal(true)}
-          className="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700 transition-colors"
-        >
-          Paste Job URL
-        </button>
+      <header className="flex h-16 items-center justify-between border-b border-border-card bg-white px-6">
+        <div>
+          <h2 className="font-display text-xl font-bold text-navy-900">{title}</h2>
+          <p className="font-mono text-xs text-navy-500">{today}</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setShowModal(true)}
+            className="rounded-lg bg-primary-500 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700 transition-colors"
+          >
+            + New Application
+          </button>
+        </div>
       </header>
 
       {showModal && (
@@ -67,10 +80,10 @@ export function Header() {
           onClick={() => !loading && setShowModal(false)}
         >
           <div
-            className="w-full max-w-lg rounded-xl bg-white p-6 shadow-xl"
+            className="w-full max-w-lg rounded-card border border-border-card bg-white p-6 shadow-xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 className="mb-4 text-lg font-semibold">Add Job</h3>
+            <h3 className="mb-4 font-display text-lg font-bold text-navy-900">Add Job</h3>
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
                 type="url"
@@ -82,7 +95,7 @@ export function Header() {
                 placeholder="Paste a job listing URL..."
                 required
                 autoFocus
-                className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+                className="w-full rounded-lg border border-border-card bg-white px-4 py-2.5 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
               />
               {error && (
                 <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-700">
@@ -94,14 +107,14 @@ export function Header() {
                   type="button"
                   onClick={() => setShowModal(false)}
                   disabled={loading}
-                  className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                  className="rounded-lg border border-border-card px-4 py-2 text-sm font-medium text-navy-800 hover:bg-surface-hover disabled:opacity-50"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="rounded-lg bg-primary-600 px-6 py-2 text-sm font-medium text-white hover:bg-primary-700 disabled:opacity-50"
+                  className="rounded-lg bg-primary-500 px-6 py-2 text-sm font-medium text-white hover:bg-primary-700 disabled:opacity-50"
                 >
                   {loading ? "Scraping..." : "Add Job"}
                 </button>

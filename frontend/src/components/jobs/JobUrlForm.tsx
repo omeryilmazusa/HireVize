@@ -45,12 +45,12 @@ export function JobUrlForm() {
           }}
           placeholder="Paste a job listing URL..."
           required
-          className="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+          className="flex-1 rounded-lg border border-border-card bg-white px-4 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
         />
         <button
           type="submit"
           disabled={loading}
-          className="rounded-lg bg-primary-600 px-6 py-2 text-sm font-medium text-white hover:bg-primary-700 disabled:opacity-50"
+          className="rounded-lg bg-primary-500 px-6 py-2 text-sm font-medium text-white hover:bg-primary-700 disabled:opacity-50"
         >
           {loading ? "Scraping..." : "Add Job"}
         </button>

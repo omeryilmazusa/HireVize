@@ -11,15 +11,15 @@ export function JobDetail({ jobId }: { jobId: string }) {
 
   if (isLoading) {
     return (
-      <div className="rounded-lg border border-gray-200 bg-white p-6">
-        <p className="text-sm text-gray-500">Loading job...</p>
+      <div className="rounded-card border border-border-card bg-white p-6">
+        <p className="text-sm text-navy-500">Loading job...</p>
       </div>
     );
   }
 
   if (!job) {
     return (
-      <div className="rounded-lg border border-gray-200 bg-white p-6">
+      <div className="rounded-card border border-border-card bg-white p-6">
         <p className="text-sm text-red-500">Job not found.</p>
       </div>
     );
@@ -36,13 +36,13 @@ export function JobDetail({ jobId }: { jobId: string }) {
   };
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-6">
+    <div className="rounded-card border border-border-card bg-white p-6">
       <div className="mb-4 flex items-start justify-between">
         <div>
-          <h3 className="text-lg font-semibold">
+          <h3 className="font-display text-lg font-bold text-navy-900">
             {job.job_title || "Untitled Position"}
           </h3>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-navy-500">
             {job.company_name || "Unknown Company"}
             {job.location && ` · ${job.location}`}
           </p>
@@ -59,7 +59,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
       </div>
 
       {job.salary_range && (
-        <p className="mb-3 text-sm text-gray-600">Salary: {job.salary_range}</p>
+        <p className="mb-3 text-sm text-navy-800">Salary: {job.salary_range}</p>
       )}
 
       <div className="mb-4">
@@ -67,7 +67,7 @@ export function JobDetail({ jobId }: { jobId: string }) {
           href={job.source_url}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-sm text-primary-600 hover:underline"
+          className="text-sm text-primary-500 hover:underline"
         >
           View original posting
         </a>
@@ -75,8 +75,8 @@ export function JobDetail({ jobId }: { jobId: string }) {
 
       {job.description_text && (
         <div className="mt-4">
-          <h4 className="mb-2 text-sm font-semibold text-gray-700">Description</h4>
-          <div className="max-h-96 overflow-y-auto rounded bg-gray-50 p-4 text-sm text-gray-700 whitespace-pre-wrap">
+          <h4 className="mb-2 text-sm font-semibold text-navy-800">Description</h4>
+          <div className="max-h-96 overflow-y-auto rounded bg-surface-subtle p-4 text-sm text-navy-800 whitespace-pre-wrap">
             {job.description_text}
           </div>
         </div>
@@ -84,8 +84,8 @@ export function JobDetail({ jobId }: { jobId: string }) {
 
       {job.requirements && Object.keys(job.requirements).length > 0 && (
         <div className="mt-4">
-          <h4 className="mb-2 text-sm font-semibold text-gray-700">Requirements</h4>
-          <pre className="max-h-48 overflow-y-auto rounded bg-gray-50 p-4 text-xs text-gray-600">
+          <h4 className="mb-2 text-sm font-semibold text-navy-800">Requirements</h4>
+          <pre className="max-h-48 overflow-y-auto rounded bg-surface-subtle p-4 text-xs text-navy-800">
             {JSON.stringify(job.requirements, null, 2)}
           </pre>
         </div>
