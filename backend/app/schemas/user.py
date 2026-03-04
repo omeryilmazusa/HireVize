@@ -17,6 +17,7 @@ class UserUpdate(BaseModel):
     eeo: Optional[dict] = None
     veteran_status: Optional[dict] = None
     disability_status: Optional[dict] = None
+    work_authorization: Optional[str] = None
     preferences: Optional[dict] = None
 
 
@@ -33,6 +34,7 @@ class UserResponse(BaseModel):
     eeo: Optional[dict] = None
     veteran_status: Optional[dict] = None
     disability_status: Optional[dict] = None
+    work_authorization: Optional[str] = None
     preferences: dict
     created_at: datetime
     updated_at: datetime

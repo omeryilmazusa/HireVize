@@ -9,8 +9,6 @@ class Settings(BaseSettings):
     anthropic_api_key: str = ""
     default_ai_model: str = "claude-sonnet-4-20250514"
 
-    playwright_headless: bool = True
-
     cors_origins: list[str] = ["http://localhost:3000"]
 
     storage_path: str = "./storage"

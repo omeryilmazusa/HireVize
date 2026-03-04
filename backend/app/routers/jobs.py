@@ -3,11 +3,9 @@ from typing import Optional
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from playwright.async_api import async_playwright
 from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.config import settings
 from app.dependencies import get_current_user, get_db
 from app.models.application import Application
 from app.models.job import Job
@@ -62,19 +60,12 @@ async def create_job(
             detail="You can't apply to the same job twice",
         )
 
-    # Scrape the job URL with Playwright
+    # Scrape the job URL
     scraped = {}
     scrape_status = "failed"
     scrape_error = None
     try:
-        async with async_playwright() as p:
-            browser = await p.chromium.launch(headless=settings.playwright_headless, slow_mo=300)
-            context = await browser.new_context(
-                user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
-            )
-            page = await context.new_page()
-            scraped = await scrape_job(page, data.source_url)
-            await browser.close()
+        scraped = await scrape_job(data.source_url)
         scrape_status = "completed"
     except Exception as exc:
         scrape_error = str(exc)

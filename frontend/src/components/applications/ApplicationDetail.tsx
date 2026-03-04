@@ -8,6 +8,11 @@ import { StatusBadge } from "./StatusBadge";
 import { api } from "@/lib/api";
 import { APPLICATION_STATUSES } from "@/lib/constants";
 
+interface StartApplyResponse {
+  application_id: string;
+  application_url: string;
+}
+
 export function ApplicationDetail({
   applicationId,
 }: {
@@ -59,22 +64,40 @@ export function ApplicationDetail({
     }
   };
 
-  const handleAutoApply = async () => {
+  const handleApplyNow = async () => {
     setApplying(true);
     setApplyError(null);
     try {
-      await api.post(`/api/v1/applications/${applicationId}/submit`, {});
+      const result = await api.post<StartApplyResponse>(
+        `/api/v1/applications/${applicationId}/start-apply`,
+        {}
+      );
       mutate();
+
+      // Open the career page — extension detects and auto-fills independently
+      window.open(result.application_url, "_blank");
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Auto-apply failed";
+      const message = err instanceof Error ? err.message : "Failed to start application";
       setApplyError(message);
-      console.error("Auto-apply failed:", err);
+      console.error("Apply now failed:", err);
     } finally {
       setApplying(false);
     }
   };
 
-  const canAutoApply = application.status === "pending" || application.status === "failed";
+  const handleMarkSubmitted = async () => {
+    try {
+      await api.put(`/api/v1/applications/${applicationId}/apply-result`, {
+        status: "submitted",
+      });
+      mutate();
+    } catch (err) {
+      console.error("Failed to mark as submitted:", err);
+    }
+  };
+
+  const canApply = application.status === "pending" || application.status === "failed";
+  const isApplying = application.status === "applying";
 
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-6">
@@ -88,13 +111,21 @@ export function ApplicationDetail({
         </div>
         <div className="flex items-center gap-2">
           <StatusBadge status={application.status} />
-          {canAutoApply && (
+          {canApply && (
             <button
-              onClick={handleAutoApply}
+              onClick={handleApplyNow}
               disabled={applying}
               className="rounded-lg bg-primary-600 px-3 py-1 text-xs font-medium text-white hover:bg-primary-700 disabled:opacity-50"
             >
-              {applying ? "Applying..." : "Auto Apply"}
+              {applying ? "Opening..." : "Apply Now"}
+            </button>
+          )}
+          {isApplying && (
+            <button
+              onClick={handleMarkSubmitted}
+              className="rounded-lg bg-green-600 px-3 py-1 text-xs font-medium text-white hover:bg-green-700"
+            >
+              Mark as Submitted
             </button>
           )}
           <button
@@ -105,6 +136,13 @@ export function ApplicationDetail({
           </button>
         </div>
       </div>
+
+      {isApplying && (
+        <div className="mb-4 rounded-lg bg-indigo-50 p-3 text-sm text-indigo-700">
+          Complete the application in the opened tab. If you have the Hirevize extension installed, it will offer to auto-fill the form.
+          Once done, click &ldquo;Mark as Submitted&rdquo; above.
+        </div>
+      )}
 
       <div className="mb-4">
         <label className="mb-1 block text-sm font-medium text-gray-700">
@@ -168,7 +206,7 @@ export function ApplicationDetail({
 
         {applyError && (
           <div className="rounded bg-red-50 p-3 text-red-600">
-            Auto-apply error: {applyError}
+            {applyError}
           </div>
         )}
 

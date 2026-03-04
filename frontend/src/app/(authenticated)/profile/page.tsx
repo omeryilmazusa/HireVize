@@ -12,6 +12,8 @@ interface Profile {
   phones: Array<{ type: string; number: string }> | null;
   linkedin_url: string | null;
   portfolio_url: string | null;
+  work_authorization: string | null;
+  candidate_answers: Record<string, string> | null;
   preferences: Record<string, string>;
 }
 
@@ -25,6 +27,10 @@ export default function ProfilePage() {
   const [email, setEmail] = useState("");
   const [linkedinUrl, setLinkedinUrl] = useState("");
   const [portfolioUrl, setPortfolioUrl] = useState("");
+  const [workAuthorization, setWorkAuthorization] = useState("");
+  const [technicalChallenge, setTechnicalChallenge] = useState("");
+  const [eligibleToWork, setEligibleToWork] = useState("");
+  const [sponsorship, setSponsorship] = useState("");
 
   useEffect(() => {
     api.get<Profile>("/api/v1/profile").then((data) => {
@@ -34,6 +40,10 @@ export default function ProfilePage() {
       setEmail(data.email || "");
       setLinkedinUrl(data.linkedin_url || "");
       setPortfolioUrl(data.portfolio_url || "");
+      setWorkAuthorization(data.work_authorization || "");
+      setTechnicalChallenge(data.candidate_answers?.technical_challenge || "");
+      setEligibleToWork(data.candidate_answers?.eligible_to_work_us || "");
+      setSponsorship(data.candidate_answers?.sponsorship || "");
     });
   }, []);
 
@@ -47,6 +57,13 @@ export default function ProfilePage() {
         email,
         linkedin_url: linkedinUrl || null,
         portfolio_url: portfolioUrl || null,
+        work_authorization: workAuthorization || null,
+        candidate_answers: {
+          ...(profile?.candidate_answers || {}),
+          technical_challenge: technicalChallenge || undefined,
+          eligible_to_work_us: eligibleToWork || undefined,
+          sponsorship: sponsorship || undefined,
+        },
       });
       setProfile(updated);
       setMessage("Profile saved successfully.");
@@ -137,6 +154,62 @@ export default function ProfilePage() {
               placeholder="https://..."
               className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
             />
+          </div>
+          <div>
+            <label className="mb-1 block text-sm font-medium text-gray-700">
+              Authorized to work in the US?
+            </label>
+            <select
+              value={workAuthorization}
+              onChange={(e) => setWorkAuthorization(e.target.value)}
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+            >
+              <option value="">-- Select --</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+          <div>
+            <label className="mb-1 block text-sm font-medium text-gray-700">
+              Required Technical Challenge?
+            </label>
+            <select
+              value={technicalChallenge}
+              onChange={(e) => setTechnicalChallenge(e.target.value)}
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+            >
+              <option value="">-- Select --</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+          <div>
+            <label className="mb-1 block text-sm font-medium text-gray-700">
+              Are you eligible to work in the USA?
+            </label>
+            <select
+              value={eligibleToWork}
+              onChange={(e) => setEligibleToWork(e.target.value)}
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+            >
+              <option value="">-- Select --</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+          <div>
+            <label className="mb-1 block text-sm font-medium text-gray-700">
+              Will you now or in the future require sponsorship?
+            </label>
+            <select
+              value={sponsorship}
+              onChange={(e) => setSponsorship(e.target.value)}
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+            >
+              <option value="">-- Select --</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
           </div>
         </div>
         <button

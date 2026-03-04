@@ -22,6 +22,7 @@ class User(UUIDMixin, TimestampMixin, Base):
     eeo: Mapped[Optional[dict]] = mapped_column(JSONB, server_default="{}", default=dict)
     veteran_status: Mapped[Optional[dict]] = mapped_column(JSONB, server_default="{}", default=dict)
     disability_status: Mapped[Optional[dict]] = mapped_column(JSONB, server_default="{}", default=dict)
+    work_authorization: Mapped[Optional[str]] = mapped_column(String(50), server_default="")
     preferences: Mapped[dict] = mapped_column(JSONB, server_default="{}", default=dict)
 
     resumes = relationship("Resume", back_populates="user", cascade="all, delete-orphan")

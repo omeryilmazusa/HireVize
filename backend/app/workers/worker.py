@@ -2,11 +2,9 @@
 
 from arq.connections import RedisSettings
 
-from app.workers.tasks import scrape_job_task, submit_application_task
-
 
 class WorkerSettings:
-    functions = [scrape_job_task, submit_application_task]
+    functions = []
     redis_settings = RedisSettings(host="localhost", port=6379)
     max_jobs = 2
     job_timeout = 300

@@ -22,3 +22,8 @@ class AuthResponse(BaseModel):
     last_name: str
 
     model_config = {"from_attributes": True}
+
+
+class ExtensionTokenResponse(BaseModel):
+    token: str
+    expires_in: int

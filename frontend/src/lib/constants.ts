@@ -1,6 +1,7 @@
 export const APPLICATION_STATUSES = [
   "pending",
   "ready",
+  "applying",
   "submitting",
   "submitted",
   "failed",

@@ -1,67 +1,71 @@
-"""Job scraping service: uses Playwright to extract job posting details from URLs."""
+"""Job scraping service: uses httpx + BeautifulSoup to extract job posting details from URLs."""
 
 import re
 from typing import Optional
 from urllib.parse import urlparse
 
-from playwright.async_api import Page
+import httpx
+from bs4 import BeautifulSoup
+
+_USER_AGENT = (
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) "
+    "Chrome/125.0.0.0 Safari/537.36"
+)
 
 
-async def scrape_job(page: Page, url: str) -> dict:
-    """Navigate to a job URL and extract structured job data.
+async def scrape_job(url: str) -> dict:
+    """Fetch a job URL and extract structured job data.
 
     Returns dict with: company_name, job_title, location, salary_range,
-    description_text, requirements, ats_platform, application_url
+    description_text, requirements, ats_platform, application_url, raw_html
     """
-    await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+    async with httpx.AsyncClient(
+        follow_redirects=True,
+        timeout=30.0,
+        headers={"User-Agent": _USER_AGENT},
+    ) as client:
+        response = await client.get(url)
+        response.raise_for_status()
 
-    ats_platform = detect_ats_platform(url, await page.content())
+    html = response.text
+    soup = BeautifulSoup(html, "html.parser")
+    ats_platform = detect_ats_platform(url, html)
 
-    # Workday SPAs need extra time for JS to render
-    if ats_platform == "workday":
-        try:
-            await page.wait_for_selector(
-                '[data-automation-id="jobPostingDescription"]', timeout=8000
-            )
-        except Exception:
-            await page.wait_for_timeout(3000)
-
-    title = await page.title()
-    company_name = await _extract_company_name(page, title, url, ats_platform)
-    job_title = await _extract_job_title(page, title)
+    company_name = _extract_company_name(soup, url, ats_platform)
+    job_title = _extract_job_title(soup)
+    description_text = _extract_description(soup, ats_platform)
 
     return {
         "company_name": company_name,
         "job_title": job_title,
         "location": None,
         "salary_range": None,
-        "description_text": await _extract_description(page, ats_platform),
+        "description_text": description_text,
         "requirements": None,
         "ats_platform": ats_platform,
         "application_url": url,
-        "raw_html": await page.content(),
+        "raw_html": html,
     }
 
 
-async def _extract_company_name(
-    page: Page, title: str, url: str, ats_platform: str
+def _extract_company_name(
+    soup: BeautifulSoup, url: str, ats_platform: str
 ) -> Optional[str]:
     """Extract company name from meta tags, page title, or URL."""
     # Try og:site_name
-    og_site = await page.evaluate(
-        "document.querySelector('meta[property=\"og:site_name\"]')?.content"
-    )
-    if og_site and og_site.strip():
-        return og_site.strip()
+    og_site = soup.find("meta", property="og:site_name")
+    if og_site and og_site.get("content", "").strip():
+        return og_site["content"].strip()
 
-    # Workday: extract from URL subdomain (e.g. fortra.wd12.myworkdayjobs.com -> Fortra)
+    # Workday: extract from URL subdomain
     if ats_platform == "workday":
         host = urlparse(url).hostname or ""
         match = re.match(r"^([^.]+)\.", host)
         if match:
             return match.group(1).replace("-", " ").title()
 
-    # Greenhouse: company name is in the URL path (e.g. /anthropic/jobs/...)
+    # Greenhouse: company name is in the URL path
     if ats_platform == "greenhouse":
         path = urlparse(url).path
         match = re.match(r"^/([^/]+)/", path)
@@ -69,11 +73,12 @@ async def _extract_company_name(
             return match.group(1).replace("-", " ").title()
 
     # Try splitting page title on common separators
+    title_tag = soup.find("title")
+    title = title_tag.string.strip() if title_tag and title_tag.string else ""
     if title:
         for sep in [" at ", " - ", " | "]:
             if sep in title:
                 parts = title.split(sep)
-                # Company is usually the last meaningful part
                 candidate = parts[-1].strip()
                 if candidate:
                     return candidate
@@ -81,30 +86,28 @@ async def _extract_company_name(
     return None
 
 
-async def _extract_job_title(page: Page, title: str) -> Optional[str]:
+def _extract_job_title(soup: BeautifulSoup) -> Optional[str]:
     """Extract job title from meta tags, h1, or page title."""
     # Try og:title
-    og_title = await page.evaluate(
-        "document.querySelector('meta[property=\"og:title\"]')?.content"
-    )
-    if og_title and og_title.strip():
-        return og_title.strip()
+    og_title = soup.find("meta", property="og:title")
+    if og_title and og_title.get("content", "").strip():
+        return og_title["content"].strip()
 
     # Try first h1
-    h1 = await page.evaluate(
-        "document.querySelector('h1')?.innerText"
-    )
-    if h1 and h1.strip():
-        return h1.strip()
+    h1 = soup.find("h1")
+    if h1 and h1.get_text(strip=True):
+        return h1.get_text(strip=True)
 
-    # Fall back to page title (first part before separator)
+    # Fall back to page title
+    title_tag = soup.find("title")
+    title = title_tag.string.strip() if title_tag and title_tag.string else ""
     if title:
         for sep in [" at ", " - ", " | "]:
             if sep in title:
                 candidate = title.split(sep)[0].strip()
                 if candidate:
                     return candidate
-        return title.strip()
+        return title
 
     return None
 
@@ -123,29 +126,35 @@ def detect_ats_platform(url: str, html: str) -> str:
     return "unknown"
 
 
-async def _extract_description(page: Page, ats_platform: str) -> str:
+def _extract_description(soup: BeautifulSoup, ats_platform: str) -> str:
     """Extract the main job description text from the page."""
     # Workday-specific selector
     if ats_platform == "workday":
-        el = await page.query_selector('[data-automation-id="jobPostingDescription"]')
+        el = soup.find(attrs={"data-automation-id": "jobPostingDescription"})
         if el:
-            text = await el.inner_text()
-            if text.strip():
-                return text.strip()
+            text = el.get_text(strip=True)
+            if text:
+                return text
 
     # Try common selectors for job descriptions
-    selectors = [
-        "[class*='description']",
-        "[class*='job-description']",
-        "[id*='description']",
-        "article",
-        "main",
-    ]
-    for selector in selectors:
-        element = await page.query_selector(selector)
-        if element:
-            text = await element.inner_text()
+    for attr_name in ["class", "id"]:
+        for pattern in ["description", "job-description", "content"]:
+            el = soup.find(attrs={attr_name: re.compile(pattern, re.I)})
+            if el:
+                text = el.get_text(separator="\n", strip=True)
+                if len(text) > 100:
+                    return text
+
+    # Try article or main
+    for tag in ["article", "main"]:
+        el = soup.find(tag)
+        if el:
+            text = el.get_text(separator="\n", strip=True)
             if len(text) > 100:
-                return text.strip()
-    # Fallback: get all body text
-    return (await page.inner_text("body"))[:5000]
+                return text
+
+    # Fallback: get body text
+    body = soup.find("body")
+    if body:
+        return body.get_text(separator="\n", strip=True)[:5000]
+    return ""

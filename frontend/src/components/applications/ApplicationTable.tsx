@@ -7,6 +7,7 @@ import { ApplicationRow } from "./ApplicationRow";
 const STATUS_FILTERS = [
   "all",
   "pending",
+  "applying",
   "draft",
   "submitted",
   "interviewing",
@@ -18,7 +19,7 @@ const STATUS_FILTERS = [
 ];
 
 export function ApplicationTable() {
-  const { applications, isLoading } = useApplications();
+  const { applications, isLoading, mutate } = useApplications();
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
 
@@ -107,7 +108,7 @@ export function ApplicationTable() {
             </thead>
             <tbody className="divide-y divide-gray-100">
               {filtered.map((app) => (
-                <ApplicationRow key={app.id} application={app} />
+                <ApplicationRow key={app.id} application={app} onMutate={mutate} />
               ))}
             </tbody>
           </table>

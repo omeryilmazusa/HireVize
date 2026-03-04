@@ -1,8 +1,10 @@
 import logging
+from datetime import datetime, timezone
 from typing import Optional
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -16,11 +18,21 @@ from app.schemas.application import (
     ApplicationResponse,
     ApplicationStatusUpdate,
 )
-from app.services.auto_applier import auto_apply
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/applications", tags=["applications"])
+
+
+class StartApplyResponse(BaseModel):
+    application_id: str
+    application_url: str
+
+
+class ApplyResultRequest(BaseModel):
+    status: str  # "submitted" or "failed"
+    automation_log: Optional[dict] = None
+    error_message: Optional[str] = None
 
 
 @router.get("", response_model=list[ApplicationResponse])
@@ -96,11 +108,16 @@ async def get_application(application_id: UUID, db: AsyncSession = Depends(get_d
     return resp
 
 
-@router.post("/{application_id}/submit", response_model=ApplicationResponse)
-async def submit_application(application_id: UUID, db: AsyncSession = Depends(get_db)):
+@router.post("/{application_id}/start-apply", response_model=StartApplyResponse)
+async def start_apply(
+    application_id: UUID,
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
     result = await db.execute(
         select(Application).options(selectinload(Application.job)).where(
-            Application.id == application_id
+            Application.id == application_id,
+            Application.user_id == user.id,
         )
     )
     application = result.scalar_one_or_none()
@@ -110,13 +127,60 @@ async def submit_application(application_id: UUID, db: AsyncSession = Depends(ge
     if application.status not in ("pending", "failed"):
         raise HTTPException(
             status_code=400,
-            detail=f"Cannot submit application with status '{application.status}'",
+            detail=f"Cannot start apply for application with status '{application.status}'",
         )
 
-    logger.info("Starting auto-apply for application %s", application_id)
-    updated = await auto_apply(application_id, db)
+    job = application.job
+    if not job:
+        raise HTTPException(status_code=400, detail="Application has no associated job")
 
-    resp = ApplicationResponse.model_validate(updated)
+    application_url = job.application_url or job.source_url
+    if not application_url:
+        raise HTTPException(status_code=400, detail="No application URL available")
+
+    application.status = "applying"
+    await db.commit()
+
+    return StartApplyResponse(
+        application_id=str(application.id),
+        application_url=application_url,
+    )
+
+
+@router.put("/{application_id}/apply-result", response_model=ApplicationResponse)
+async def apply_result(
+    application_id: UUID,
+    data: ApplyResultRequest,
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(
+        select(Application).options(selectinload(Application.job)).where(
+            Application.id == application_id,
+            Application.user_id == user.id,
+        )
+    )
+    application = result.scalar_one_or_none()
+    if not application:
+        raise HTTPException(status_code=404, detail="Application not found")
+
+    if data.status == "submitted":
+        application.status = "submitted"
+        application.submitted_at = datetime.now(timezone.utc)
+        application.error_message = None
+    elif data.status == "failed":
+        application.status = "failed"
+        application.error_message = data.error_message
+    else:
+        raise HTTPException(status_code=400, detail="Status must be 'submitted' or 'failed'")
+
+    if data.automation_log:
+        application.automation_log = data.automation_log
+
+    await db.commit()
+    await db.refresh(application)
+
+    resp = ApplicationResponse.model_validate(application)
     if application.job:
         resp.company_name = application.job.company_name
         resp.job_title = application.job.job_title
