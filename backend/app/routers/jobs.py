@@ -22,9 +22,10 @@ router = APIRouter(prefix="/jobs", tags=["jobs"])
 async def list_jobs(
     status: Optional[str] = Query(None),
     search: Optional[str] = Query(None),
+    user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    stmt = select(Job)
+    stmt = select(Job).where(Job.user_id == user.id)
 
     if status:
         stmt = stmt.where(Job.scrape_status == status)
@@ -93,7 +94,7 @@ async def create_job(
     application = Application(
         user_id=user.id,
         job_id=job.id,
-        status="pending",
+        status="added",
     )
     db.add(application)
 
@@ -103,8 +104,12 @@ async def create_job(
 
 
 @router.get("/{job_id}", response_model=JobResponse)
-async def get_job(job_id: UUID, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Job).where(Job.id == job_id))
+async def get_job(
+    job_id: UUID,
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(select(Job).where(Job.id == job_id, Job.user_id == user.id))
     job = result.scalar_one_or_none()
     if not job:
         raise HTTPException(status_code=404, detail="Job not found")
@@ -112,8 +117,12 @@ async def get_job(job_id: UUID, db: AsyncSession = Depends(get_db)):
 
 
 @router.delete("/{job_id}", status_code=204)
-async def delete_job(job_id: UUID, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Job).where(Job.id == job_id))
+async def delete_job(
+    job_id: UUID,
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(select(Job).where(Job.id == job_id, Job.user_id == user.id))
     job = result.scalar_one_or_none()
     if not job:
         raise HTTPException(status_code=404, detail="Job not found")
@@ -123,8 +132,12 @@ async def delete_job(job_id: UUID, db: AsyncSession = Depends(get_db)):
 
 
 @router.post("/{job_id}/rescrape", response_model=JobResponse)
-async def rescrape_job(job_id: UUID, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Job).where(Job.id == job_id))
+async def rescrape_job(
+    job_id: UUID,
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(select(Job).where(Job.id == job_id, Job.user_id == user.id))
     job = result.scalar_one_or_none()
     if not job:
         raise HTTPException(status_code=404, detail="Job not found")

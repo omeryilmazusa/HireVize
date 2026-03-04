@@ -15,8 +15,13 @@ router = APIRouter(prefix="/resumes", tags=["resumes"])
 
 
 @router.get("", response_model=list[ResumeResponse])
-async def list_resumes(db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Resume).order_by(Resume.created_at.desc()))
+async def list_resumes(
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(
+        select(Resume).where(Resume.user_id == user.id).order_by(Resume.created_at.desc())
+    )
     return result.scalars().all()
 
 
@@ -47,8 +52,14 @@ async def upload_resume(
 
 
 @router.get("/{resume_id}", response_model=ResumeResponse)
-async def get_resume(resume_id: UUID, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Resume).where(Resume.id == resume_id))
+async def get_resume(
+    resume_id: UUID,
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(
+        select(Resume).where(Resume.id == resume_id, Resume.user_id == user.id)
+    )
     resume = result.scalar_one_or_none()
     if not resume:
         raise HTTPException(status_code=404, detail="Resume not found")
@@ -56,8 +67,14 @@ async def get_resume(resume_id: UUID, db: AsyncSession = Depends(get_db)):
 
 
 @router.get("/{resume_id}/download")
-async def download_resume(resume_id: UUID, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Resume).where(Resume.id == resume_id))
+async def download_resume(
+    resume_id: UUID,
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(
+        select(Resume).where(Resume.id == resume_id, Resume.user_id == user.id)
+    )
     resume = result.scalar_one_or_none()
     if not resume:
         raise HTTPException(status_code=404, detail="Resume not found")
@@ -75,8 +92,15 @@ async def download_resume(resume_id: UUID, db: AsyncSession = Depends(get_db)):
 
 
 @router.put("/{resume_id}", response_model=ResumeResponse)
-async def update_resume(resume_id: UUID, data: ResumeUpdate, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Resume).where(Resume.id == resume_id))
+async def update_resume(
+    resume_id: UUID,
+    data: ResumeUpdate,
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(
+        select(Resume).where(Resume.id == resume_id, Resume.user_id == user.id)
+    )
     resume = result.scalar_one_or_none()
     if not resume:
         raise HTTPException(status_code=404, detail="Resume not found")
@@ -90,8 +114,14 @@ async def update_resume(resume_id: UUID, data: ResumeUpdate, db: AsyncSession = 
 
 
 @router.delete("/{resume_id}", status_code=204)
-async def delete_resume(resume_id: UUID, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Resume).where(Resume.id == resume_id))
+async def delete_resume(
+    resume_id: UUID,
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(
+        select(Resume).where(Resume.id == resume_id, Resume.user_id == user.id)
+    )
     resume = result.scalar_one_or_none()
     if not resume:
         raise HTTPException(status_code=404, detail="Resume not found")
@@ -102,14 +132,20 @@ async def delete_resume(resume_id: UUID, db: AsyncSession = Depends(get_db)):
 
 
 @router.put("/{resume_id}/primary", response_model=ResumeResponse)
-async def set_primary(resume_id: UUID, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Resume).where(Resume.id == resume_id))
+async def set_primary(
+    resume_id: UUID,
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(
+        select(Resume).where(Resume.id == resume_id, Resume.user_id == user.id)
+    )
     resume = result.scalar_one_or_none()
     if not resume:
         raise HTTPException(status_code=404, detail="Resume not found")
 
-    # Unset all other resumes as primary
-    all_result = await db.execute(select(Resume).where(Resume.user_id == resume.user_id))
+    # Unset all other resumes as primary for this user
+    all_result = await db.execute(select(Resume).where(Resume.user_id == user.id))
     for r in all_result.scalars().all():
         r.is_primary = False
 

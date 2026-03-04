@@ -61,11 +61,11 @@ async def create_interview(
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    # Verify application exists
+    # Verify application exists and belongs to user
     app_result = await db.execute(
         select(Application)
         .options(selectinload(Application.job))
-        .where(Application.id == data.application_id)
+        .where(Application.id == data.application_id, Application.user_id == user.id)
     )
     application = app_result.scalar_one_or_none()
     if not application:

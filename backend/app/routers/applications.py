@@ -39,9 +39,12 @@ class ApplyResultRequest(BaseModel):
 async def list_applications(
     status: Optional[str] = Query(None),
     sort: Optional[str] = Query(None),
+    user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    stmt = select(Application).options(selectinload(Application.job))
+    stmt = select(Application).options(selectinload(Application.job)).where(
+        Application.user_id == user.id
+    )
 
     if status:
         stmt = stmt.where(Application.status == status)
@@ -79,7 +82,7 @@ async def create_application(
         job_id=data.job_id,
         cover_letter=data.cover_letter,
         form_answers=data.form_answers,
-        status="pending",
+        status="added",
     )
     db.add(application)
     await db.commit()
@@ -92,9 +95,14 @@ async def create_application(
 
 
 @router.get("/{application_id}", response_model=ApplicationResponse)
-async def get_application(application_id: UUID, db: AsyncSession = Depends(get_db)):
+async def get_application(
+    application_id: UUID,
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
     stmt = select(Application).options(selectinload(Application.job)).where(
-        Application.id == application_id
+        Application.id == application_id,
+        Application.user_id == user.id,
     )
     result = await db.execute(stmt)
     application = result.scalar_one_or_none()
@@ -189,10 +197,14 @@ async def apply_result(
 
 @router.put("/{application_id}/status", response_model=ApplicationResponse)
 async def update_status(
-    application_id: UUID, data: ApplicationStatusUpdate, db: AsyncSession = Depends(get_db)
+    application_id: UUID,
+    data: ApplicationStatusUpdate,
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
 ):
     stmt = select(Application).options(selectinload(Application.job)).where(
-        Application.id == application_id
+        Application.id == application_id,
+        Application.user_id == user.id,
     )
     result = await db.execute(stmt)
     application = result.scalar_one_or_none()
@@ -213,9 +225,13 @@ async def update_status(
 
 
 @router.delete("/{application_id}", status_code=204)
-async def delete_application(application_id: UUID, db: AsyncSession = Depends(get_db)):
+async def delete_application(
+    application_id: UUID,
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
     result = await db.execute(
-        select(Application).where(Application.id == application_id)
+        select(Application).where(Application.id == application_id, Application.user_id == user.id)
     )
     application = result.scalar_one_or_none()
     if not application:

@@ -1,15 +1,17 @@
 export const APPLICATION_STATUSES = [
-  "pending",
-  "ready",
+  "added",
   "applying",
-  "submitting",
-  "submitted",
-  "failed",
-  "withdrawn",
-  "interviewing",
-  "rejected",
+  "applied",
+  "phone_call",
+  "video_call",
+  "1st_round",
+  "2nd_round",
+  "3rd_round",
+  "final_interview",
   "offered",
   "accepted",
+  "rejected",
+  "withdrawn",
 ] as const;
 
 export const SCRAPE_STATUSES = [

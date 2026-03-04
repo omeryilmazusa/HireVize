@@ -14,7 +14,7 @@ class Application(UUIDMixin, TimestampMixin, Base):
 
     user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
     job_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("jobs.id"), nullable=False, unique=True)
-    status: Mapped[str] = mapped_column(String(50), nullable=False, default="pending", server_default="pending")
+    status: Mapped[str] = mapped_column(String(50), nullable=False, default="added", server_default="added")
     cover_letter: Mapped[Optional[str]] = mapped_column(Text)
     form_answers: Mapped[Optional[dict]] = mapped_column(JSONB)
     automation_log: Mapped[Optional[dict]] = mapped_column(JSONB)

@@ -154,7 +154,7 @@ export function ApplicationDetail({
         >
           {APPLICATION_STATUSES.map((s) => (
             <option key={s} value={s}>
-              {s}
+              {s.replace(/_/g, " ")}
             </option>
           ))}
         </select>
