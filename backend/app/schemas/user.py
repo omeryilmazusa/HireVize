@@ -26,6 +26,7 @@ class UserResponse(BaseModel):
     first_name: str
     last_name: str
     email: str
+    role: str = "member"
     phones: Optional[list] = None
     linkedin_url: Optional[str] = None
     portfolio_url: Optional[str] = None
