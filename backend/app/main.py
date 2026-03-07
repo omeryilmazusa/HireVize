@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
-from app.routers import applications, auth, dashboard, extension, interviews, jobs, profile, resumes, team_invites, teams
+from app.routers import applications, auth, dashboard, extension, interviews, jobs, profile, resumes
 
 
 @asynccontextmanager
@@ -30,8 +30,6 @@ app.include_router(dashboard.router, prefix="/api/v1")
 app.include_router(profile.router, prefix="/api/v1")
 app.include_router(interviews.router, prefix="/api/v1")
 app.include_router(extension.router, prefix="/api/v1")
-app.include_router(teams.router, prefix="/api/v1")
-app.include_router(team_invites.router, prefix="/api/v1")
 
 
 @app.get("/health")

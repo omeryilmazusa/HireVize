@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/lib/auth";
 
-const baseNavGroups = [
+const navGroups = [
   {
     label: "WORKSPACE",
     items: [
@@ -30,22 +30,9 @@ const baseNavGroups = [
   },
 ];
 
-const teamNavGroup = {
-  label: "TEAM",
-  items: [
-    { href: "/team", label: "Team Dashboard" },
-    { href: "/team/members", label: "Members" },
-  ],
-};
-
 export function Sidebar() {
   const pathname = usePathname();
   const { user, logout } = useAuth();
-
-  const navGroups =
-    user?.role === "team_manager"
-      ? [...baseNavGroups.slice(0, 2), teamNavGroup, ...baseNavGroups.slice(2)]
-      : baseNavGroups;
 
   const initials = user
     ? `${user.first_name?.[0] || ""}${user.last_name?.[0] || ""}`.toUpperCase()
